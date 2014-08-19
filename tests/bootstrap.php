@@ -1,7 +1,12 @@
 <?php
 
-$_tests_dir = getenv('WP_TESTS_DIR');
-if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+$_develop_dir = getenv( 'WP_DEVELOP_DIR' );
+if ( ! empty( $_develop_dir ) ) {
+	$_tests_dir = $_develop_dir . '/tests/phpunit/';
+} else {
+	$_tests_dir = getenv('WP_TESTS_DIR');
+	if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+}
 
 require_once $_tests_dir . '/includes/functions.php';
 
