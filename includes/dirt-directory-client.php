@@ -84,7 +84,7 @@ class DiRT_Directory_Client {
 	 * @return string
 	 */
 	public function get_request_uri() {
-		$request_uri = trailingslashit( $this->api_base ) . $this->endpoint . '.json';
+		$request_uri = trailingslashit( $this->api_base ) . $this->endpoint;
 		$request_uri = add_query_arg( $this->query_vars, $request_uri );
 		return $request_uri;
 	}
@@ -110,14 +110,23 @@ class DiRT_Directory_Client {
 	 * Get a list of taxonomies.
 	 */
 	public function get_taxonomies() {
-		return $this->set_endpoint( 'taxonomy_vocabulary' )->request();
+		return $this->set_endpoint( 'taxonomy_vocabulary.json' )->request();
 	}
 
 	/**
 	 * Get a list of terms for a given taxonomy.
 	 */
 	public function get_taxonomy_terms( $taxonomy_id ) {
-		return $this->set_endpoint( 'entity_taxonomy_term' )->add_query_var( 'parameters[vid]', intval( $taxonomy_id ) )->request();
+		return $this->set_endpoint( 'entity_taxonomy_term.json' )->add_query_var( 'parameters[vid]', intval( $taxonomy_id ) )->request();
+	}
+
+	/**
+	 * Get an item by node ID.
+	 *
+	 * @param int $node_id
+	 */
+	public function get_item_by_node_id( $node_id ) {
+		return $this->set_endpoint( 'node/' . $node_id . '.json' )->request();
 	}
 
 	/**
@@ -128,7 +137,7 @@ class DiRT_Directory_Client {
 	 * @todo Is broken
 	 */
 	public function get_items_for_taxonomy_term( $taxonomy_term_id ) {
-		return $this->set_endpoint( 'entity_node' )->add_query_var( 'parameters[tid]', intval( $taxonomy_term_id ) )->request();
+		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[tid]', intval( $taxonomy_term_id ) )->request();
 	}
 
 	/**
