@@ -150,3 +150,35 @@ class DiRT_Directory_Client {
 	}
 }
 
+/**
+ * Procedural wrapper for making API queries.
+ *
+ * @since 1.0
+ *
+ * @param array $args {
+ *     @type string $type Query type. 'search'.
+ *     @type string $search_terms Terms to search.
+ * }
+ * @return array
+ */
+function ddc_query_tools( $args ) {
+	$tools = array();
+
+	if ( empty( $args['type'] ) ) {
+		return $tools;
+	}
+
+	$c = new DiRT_Directory_Client();
+
+	switch ( $args['type'] ) {
+		case 'search' :
+			if ( empty( $args['search_terms'] ) ) {
+				return $tools;
+			}
+
+			$tools = $c->get_items_by_search_term( $args['search_terms'] );
+	}
+
+	return $tools;
+}
+
