@@ -1,0 +1,42 @@
+/* line 1, ../sass/screen.scss */
+.dirt-search-terms {
+  font-style: italic;
+}
+
+/* line 6, ../sass/screen.scss */
+ol.dirt-tools > li {
+  overflow: hidden;
+  margin: 0 0 2em;
+  padding: 10px;
+  position: relative;
+  border: 1px solid #eaeaea;
+}
+/* line 14, ../sass/screen.scss */
+ol.dirt-tools .dirt-tool-name {
+  font-weight: bold;
+}
+/* line 18, ../sass/screen.scss */
+ol.dirt-tools .dirt-tool-action {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+/* line 24, ../sass/screen.scss */
+ol.dirt-tools ul.dirt-tool-users {
+  list-style-type: none;
+}
+/* line 27, ../sass/screen.scss */
+ol.dirt-tools ul.dirt-tool-users > li {
+  margin: 15px 40px;
+  width: 400px;
+  float: left;
+}
+/* line 32, ../sass/screen.scss */
+ol.dirt-tools ul.dirt-tool-users > li .dirt-tool-user-avatar {
+  width: 70px;
+  float: left;
+}
+/* line 37, ../sass/screen.scss */
+ol.dirt-tools ul.dirt-tool-users > li .dirt-tool-user-link {
+  padding-top: 11px;
+}
