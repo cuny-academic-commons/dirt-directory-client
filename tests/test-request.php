@@ -56,7 +56,7 @@ class DiRT_Directory_Client_Tests_Requests extends WP_UnitTestCase {
 		$c = new DiRT_Directory_Client();
 //		print_r( $c->get_taxonomies() );
 //		print_r( $c->get_taxonomy_terms( 6 ) );
-//		print_r( $c->get_items_for_taxonomy_term( 6 ) );
+//		print_r( $c->get_items_for_taxonomy_term( 124 ) );
 //		print_r( $c->get_items_by_search_term( 'wiki' ) );
 //		print_r( $c );
 	}

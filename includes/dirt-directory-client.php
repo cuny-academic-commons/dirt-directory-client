@@ -1,13 +1,4 @@
 <?php
-/*
-Plugin Name: DiRT Directory Client
-Version: 1.0
-Description: Interface with the DiRT Directory API http://dirt.projectbamboo.org
-Author: Boone B Gorges
-Author URI: http://boone.gorg.es
-Text Domain: dirt-directory-client
-Domain Path: /languages
-*/
 
 /**
  * API client class.
@@ -107,6 +98,7 @@ class DiRT_Directory_Client {
 	 */
 	public function request() {
 		$uri = $this->get_request_uri();
+
 		$response = wp_remote_get( $uri );
 		$response_body = wp_remote_retrieve_body( $response );
 		return json_decode( $response_body );
@@ -123,21 +115,20 @@ class DiRT_Directory_Client {
 
 	/**
 	 * Get a list of terms for a given taxonomy.
-	 *
-	 * @todo This seems to be broken - it's returning items from all
-	 *       taxonomies instead of just 'vid'
 	 */
 	public function get_taxonomy_terms( $taxonomy_id ) {
-		return $this->set_endpoint( 'entity_taxonomy_term' )->add_query_var( 'vid', intval( $taxonomy_id ) )->request();
+		return $this->set_endpoint( 'entity_taxonomy_term' )->add_query_var( 'parameters[vid]', intval( $taxonomy_id ) )->request();
 	}
 
 	/**
 	 * Get a list of the items (nodes/tools) that match a given taxonomy term.
 	 *
 	 * @param int $taxonomy_term_id
+	 *
+	 * @todo Is broken
 	 */
 	public function get_items_for_taxonomy_term( $taxonomy_term_id ) {
-		return $this->set_endpoint( 'entity_node' )->add_query_var( 'tid', intval( $taxonomy_term_id ) )->request();
+		return $this->set_endpoint( 'entity_node' )->add_query_var( 'parameters[tid]', intval( $taxonomy_term_id ) )->request();
 	}
 
 	/**
