@@ -81,6 +81,15 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	}
 
 	/**
+	 * Main tab display.
+	 *
+	 * @since 1.0
+	 */
+	public function display() {
+		bp_get_template_part( 'dirt/group' );
+	}
+
+	/**
 	 * Settings screen markup.
 	 *
 	 * @since 1.0
@@ -181,4 +190,18 @@ class DDC_Group_Extension extends BP_Group_Extension {
 
 		return $this->current_group_settings;
 	}
+}
+
+/**
+ * Get tools in use by a group.
+ *
+ * @param int $group_id Optional. Group ID. Default: current group ID.
+ * @return array
+ */
+function ddc_get_tools_used_by_group( $group_id = null ) {
+	if ( is_null( $group_id ) && bp_is_group() ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	return array();
 }

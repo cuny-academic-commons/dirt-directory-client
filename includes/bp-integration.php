@@ -7,19 +7,20 @@
  */
 
 /**
- * Load group integration.
+ * Load BP integration files.
  *
  * @since 1.0
  */
-function ddc_load_bp_group_integration() {
-	if ( ! bp_is_active( 'groups' ) ) {
-		return;
-	}
+function ddc_load_bp_integration() {
+	require DDC_PLUGIN_DIR . 'includes/template.php';
+	require DDC_PLUGIN_DIR . 'includes/user-integration.php';
 
-	require DDC_PLUGIN_DIR . 'includes/bp-groups-integration.php';
-	bp_register_group_extension( 'DDC_Group_Extension' );
+	if ( bp_is_active( 'groups' ) ) {
+		require DDC_PLUGIN_DIR . 'includes/bp-groups-integration.php';
+		bp_register_group_extension( 'DDC_Group_Extension' );
+	}
 }
-add_action( 'bp_init', 'ddc_load_bp_group_integration' );
+add_action( 'bp_init', 'ddc_load_bp_integration' );
 
 /**
  * Load schema for storing tool connections.
@@ -44,3 +45,17 @@ function ddc_load_schema() {
 	) );
 }
 add_action( 'init', 'ddc_load_schema' );
+
+/**
+ * Add local templates to the BP template stack, so that bp_get_template_part() can be used.
+ *
+ * @since 1.0
+ *
+ * @param $array Template stack.
+ * @return $array
+ */
+function ddc_add_to_template_stack( $stack ) {
+	$stack[] = DDC_PLUGIN_DIR . 'templates';
+	return $stack;
+}
+add_filter( 'bp_get_template_stack', 'ddc_add_to_template_stack' );
