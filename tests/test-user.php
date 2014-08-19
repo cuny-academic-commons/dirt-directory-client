@@ -125,6 +125,29 @@ class DiRT_Directory_Client_Tests_Users extends WP_UnitTestCase {
 		$this->assertEqualSets( array( $u2, $u3 ), wp_list_pluck( $users_of_t2, 'ID' ) );
 	}
 
+	/**
+	 * @group ddc_get_tools_of_user
+	 */
+	public function test_ddc_get_tools_of_user() {
+		$u1 = $this->factory->user->create();
+		$u2 = $this->factory->user->create();
+		$u3 = $this->factory->user->create();
+
+		$t1 = $this->create_tool();
+		$t2 = $this->create_tool();
+
+		ddc_associate_tool_with_user( $t1, $u1 );
+		ddc_associate_tool_with_user( $t1, $u2 );
+		ddc_associate_tool_with_user( $t2, $u2 );
+		ddc_associate_tool_with_user( $t2, $u3 );
+
+		$tools_of_u1 = ddc_get_tools_of_user( $u1 );
+		$this->assertEqualSets( array( $t1 ), wp_list_pluck( $tools_of_u1, 'ID' ) );
+
+		$tools_of_u2 = ddc_get_tools_of_user( $u2 );
+		$this->assertEqualSets( array( $t1, $t2 ), wp_list_pluck( $tools_of_u2, 'ID' ) );
+	}
+
 	protected function create_tool() {
 		$t = ddc_create_tool( array(
 			'title' => 'Foo',

@@ -206,5 +206,15 @@ function ddc_get_tools_used_by_group( $group_id = null ) {
 		$group_id = bp_get_current_group_id();
 	}
 
+	$group_member_query = new BP_Group_Member_Query( array(
+		'group_id' => $group_id,
+		'type' => 'alphabetical',
+	) );
+
+	$group_member_tools = array();
+	foreach ( $group_member_query->results as $group_member ) {
+
+	}
+
 	return array();
 }

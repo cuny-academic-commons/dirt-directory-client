@@ -181,6 +181,30 @@ function ddc_get_users_of_tool( $tool_id ) {
 	return $users['users'];
 }
 
+/**
+ * Get tools of a given user.
+ *
+ * @since 1.0
+ *
+ * @param int $user_id
+ * @return array
+ */
+function ddc_get_tools_of_user( $user_id ) {
+	$tools_query = new WP_Query( array(
+		'post_type' => 'ddc_tool',
+		'post_status' => 'publish',
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'ddc_tool_is_used_by_user',
+				'terms' => ddc_get_user_term( $user_id ),
+				'field' => 'slug',
+			),
+		),
+	) );
+
+	return $tools_query->posts;
+}
+
 /** Action functions *********************************************************/
 
 /**
@@ -236,7 +260,7 @@ function ddc_catch_add_remove_requests() {
 		if ( empty( $tool ) ) {
 			$c = new DiRT_Directory_Client();
 			$tool_data = $c->get_item_by_node_id( $tool_node_id );
-			if ( ! empty( $tool ) ) {
+			if ( ! empty( $tool_data ) ) {
 				$tool_id = ddc_create_tool( array(
 					'title'   => $tool_data->title,
 					'link'    => $tool_data->link,
