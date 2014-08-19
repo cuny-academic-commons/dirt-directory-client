@@ -93,7 +93,7 @@ class DiRT_Directory_Client {
 	 * @return string
 	 */
 	public function get_request_uri() {
-		$request_uri = trailingslashit( $this->api_base ) . trailingslashit( $this->endpoint );
+		$request_uri = trailingslashit( $this->api_base ) . $this->endpoint . '.json';
 		$request_uri = add_query_arg( $this->query_vars, $request_uri );
 		return $request_uri;
 	}
