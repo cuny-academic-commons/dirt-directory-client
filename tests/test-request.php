@@ -8,7 +8,7 @@ class DiRT_Directory_Client_Tests_Requests extends WP_UnitTestCase {
 		$c = new DiRT_Directory_Client();
 		$uri = $c->set_endpoint( 'foo' )->get_request_uri();
 
-		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100';
+		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100&direction=ASC';
 
 		$this->assertSame( $expected, $uri );
 	}
@@ -20,7 +20,7 @@ class DiRT_Directory_Client_Tests_Requests extends WP_UnitTestCase {
 		$c = new DiRT_Directory_Client();
 		$uri = $c->set_endpoint( 'foo' )->add_query_var( 'bar', 'baz' )->get_request_uri();
 
-		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100&bar=baz';
+		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100&direction=ASC&bar=baz';
 
 		$this->assertSame( $expected, $uri );
 	}
@@ -32,7 +32,7 @@ class DiRT_Directory_Client_Tests_Requests extends WP_UnitTestCase {
 		$c = new DiRT_Directory_Client();
 		$uri = $c->set_endpoint( 'foo' )->add_query_var( 'bar', 'baz' )->add_query_var( 'bar2', 'baz2' )->get_request_uri();
 
-		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100&bar=baz&bar2=baz2';
+		$expected = trailingslashit( $c->api_base ) . 'foo/?page=0&pagesize=100&direction=ASC&bar=baz&bar2=baz2';
 
 		$this->assertSame( $expected, $uri );
 	}
@@ -44,7 +44,7 @@ class DiRT_Directory_Client_Tests_Requests extends WP_UnitTestCase {
 		$c = new DiRT_Directory_Client();
 		$uri = $c->set_endpoint( 'foo' )->add_query_var( 'page', '3' )->add_query_var( 'pagesize', '200' )->get_request_uri();
 
-		$expected = trailingslashit( $c->api_base ) . 'foo/?page=3&pagesize=200';
+		$expected = trailingslashit( $c->api_base ) . 'foo/?page=3&pagesize=200&direction=ASC';
 
 		$this->assertSame( $expected, $uri );
 	}
