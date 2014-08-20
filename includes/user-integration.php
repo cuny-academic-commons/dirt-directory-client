@@ -202,6 +202,12 @@ function ddc_get_tools_of_user( $user_id ) {
 		),
 	) );
 
+	// Add DiRT-specific info to post objects
+	foreach ( $tools_query->posts as &$post ) {
+		$post->dirt_node_id = get_post_meta( $post->ID, 'dirt_node_id', true );
+		$post->dirt_link    = get_post_meta( $post->ID, 'dirt_link', true );
+	}
+
 	return $tools_query->posts;
 }
 
@@ -263,7 +269,7 @@ function ddc_catch_add_remove_requests() {
 			if ( ! empty( $tool_data ) ) {
 				$tool_id = ddc_create_tool( array(
 					'title'   => $tool_data->title,
-					'link'    => $tool_data->link,
+					'link'    => $tool_data->path,
 					'node_id' => $tool_node_id,
 				) );
 

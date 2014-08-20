@@ -213,8 +213,19 @@ function ddc_get_tools_used_by_group( $group_id = null ) {
 
 	$group_member_tools = array();
 	foreach ( $group_member_query->results as $group_member ) {
+		$gm_tools = ddc_get_tools_of_user( $group_member->ID );
+		foreach ( $gm_tools as $gm_tool ) {
+			if ( ! isset( $group_member_tools[ $gm_tool->ID ] ) ) {
+				$group_member_tools[ $gm_tool->ID ] = $gm_tool;
+			}
 
+			if ( ! isset( $group_member_tools[ $gm_tool->ID ]->users_of_tool ) ) {
+				$group_member_tools[ $gm_tool->ID ]->users_of_tool = array();
+			}
+
+			$group_member_tools[ $gm_tool->ID ]->users_of_tool[] = $group_member->ID;
+		}
 	}
 
-	return array();
+	return $group_member_tools;
 }

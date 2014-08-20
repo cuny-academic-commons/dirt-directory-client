@@ -1,4 +1,4 @@
-<h4><?php _e( 'Explore', 'dirt-directory-client' ) ?></h4>
+<h3><?php _e( 'Explore', 'dirt-directory-client' ) ?></h3>
 
 <form method="get" action="">
 	<?php $search_terms = isset( $_GET['dirt-search'] ) ? urldecode( $_GET['dirt-search'] ) : ''; ?>
@@ -18,11 +18,16 @@
 
 			<ol class="dirt-tools">
 			<?php foreach ( $search_results as $search_result ) : ?>
-				<li><?php echo ddc_tool_markup( $search_result ) ?></li>
+				<li><?php echo ddc_tool_markup( array(
+					'link' => $search_result->link,
+					'title' => $search_result->title,
+					'node_id' => $search_result->node->nid,
+					'snippet' => $search_result->snippet,
+				) ) ?></li>
 			<?php endforeach; ?>
 			</ol>
 		<?php else : ?>
-			<p><?php printf( __( 'We could&#8217;nt find any tools that matched the following query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>') ?></p>
+			<p><?php printf( __( 'We couldn&#8217;t find any tools that matched the following query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>') ?></p>
 		<?php endif; ?>
 	<?php endif ?>
 </form>
