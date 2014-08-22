@@ -211,7 +211,11 @@ function ddc_get_users_of_tool( $tool_id, $args ) {
  * @param int $user_id
  * @return array
  */
-function ddc_get_tools_of_user( $user_id ) {
+function ddc_get_tools_of_user( $user_id, $args = array() ) {
+	$r = array_merge( array(
+		'posts_per_page' => -1,
+	), $args );
+
 	$tools_query = new WP_Query( array(
 		'post_type' => 'ddc_tool',
 		'post_status' => 'publish',
@@ -222,6 +226,7 @@ function ddc_get_tools_of_user( $user_id ) {
 				'field' => 'slug',
 			),
 		),
+		'posts_per_page' => intval( $r['posts_per_page'] ),
 	) );
 
 	// Add DiRT-specific info to post objects
@@ -378,7 +383,10 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'position' => 83,
 			'screen_function' => array( $this, 'template_loader' ),
 			'default_subnav_slug' => 'tools',
+			'show_for_displayed_user' => true, // Going to change this later
 		);
+
+		add_action( 'init', array( $this, 'change_tab_visibility' ), 100 );
 
 		$sub_nav[] = array(
 			'name' => __( 'Tools', 'dirt-directory-client' ),
@@ -389,6 +397,42 @@ class DiRT_Directory_Client_Component extends BP_Component {
 		);
 
 		parent::setup_nav( $main_nav, $sub_nav );
+	}
+
+	/**
+	 * Should the tab be shown for the user?
+	 *
+	 * Current logic: show if the user has any tools.
+	 *
+	 * Have to do it like this because post types are not registered at the
+	 * time that the nav is set up. Blargh.
+	 *
+	 * @since 1.0
+	 *
+	 * @return bool
+	 */
+	public function change_tab_visibility() {
+		$tools_query = new WP_Query( array(
+			'post_type' => 'ddc_tool',
+			'post_status' => 'publish',
+			'tax_query' => array(
+				array(
+					'taxonomy' => 'ddc_tool_is_used_by_user',
+					'terms' => ddc_get_user_term( bp_displayed_user_id() ),
+					'field' => 'slug',
+				),
+			),
+			'posts_per_page' => 1,
+			'fields' => 'ID',
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		) );
+
+		$bp_nav = buddypress()->bp_nav;
+
+		$bp_nav->ddc['show_for_displayed_user'] = $tools_query->have_posts();
+
+		buddypress()->bp_nav = $bp_nav;
 	}
 
 	/**
@@ -421,4 +465,4 @@ class DiRT_Directory_Client_Component extends BP_Component {
 function ddc_component_bootstrap() {
 	buddypress()->ddc = new DiRT_Directory_Client_Component();
 }
-ddc_component_bootstrap();
+ddc_component_bootstrap(); // No need to wait - we're already at bp_loaded
