@@ -430,7 +430,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 
 		$bp_nav = buddypress()->bp_nav;
 
-		$bp_nav->ddc['show_for_displayed_user'] = $tools_query->have_posts();
+		$bp_nav['dirt']['show_for_displayed_user'] = $tools_query->have_posts();
 
 		buddypress()->bp_nav = $bp_nav;
 	}
