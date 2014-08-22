@@ -20,7 +20,7 @@ function ddc_load_bp_integration() {
 		bp_register_group_extension( 'DDC_Group_Extension' );
 	}
 }
-add_action( 'bp_init', 'ddc_load_bp_integration' );
+add_action( 'bp_loaded', 'ddc_load_bp_integration', 20 );
 
 /**
  * Load schema for storing tool connections.

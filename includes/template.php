@@ -31,7 +31,12 @@ function ddc_tool_markup( $tool_data ) {
 
 	$used_by_users = array();
 	if ( ! empty( $tool ) ) {
-		$used_by_users = ddc_get_users_of_tool( $tool->ID );
+		$args = array();
+		if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
+			$args['group_id'] = bp_get_current_group_id();
+		}
+
+		$used_by_users = ddc_get_users_of_tool( $tool->ID, $args );
 	}
 
 	// Action button

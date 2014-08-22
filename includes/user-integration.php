@@ -165,12 +165,34 @@ function ddc_get_tool( $by, $value ) {
  * @param int $tool_id
  * @return bool|array $users False on failure, users on success.
  */
-function ddc_get_users_of_tool( $tool_id ) {
+function ddc_get_users_of_tool( $tool_id, $args ) {
 	$terms = wp_get_object_terms( $tool_id, 'ddc_tool_is_used_by_user' );
 
 	$user_ids = array( 0 );
 	foreach ( $terms as $term ) {
-		$user_ids[] = ddc_get_user_id_from_usedby_term_slug( $term->slug );
+		$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
+
+		// If limiting to a group, check that the user is a member
+		// first
+		if ( ! empty( $args['group_id'] ) && bp_is_active( 'groups' ) ) {
+			if ( ! isset( $group_members ) ) {
+				$group_member_query = new BP_Group_Member_Query( array(
+					'group_id' => $args['group_id'],
+					'group_role' => array(
+						'member',
+						'mod',
+						'admin',
+					),
+				) );
+				$group_members = wp_list_pluck( $group_member_query->results, 'ID' );
+			}
+
+			if ( ! in_array( $user_id, $group_members ) ) {
+				continue;
+			}
+		}
+
+		$user_ids[] = $user_id;
 	}
 
 	$users = bp_core_get_users( array(
@@ -310,3 +332,93 @@ function ddc_catch_add_remove_requests() {
 	bp_core_redirect( $redirect_to );
 }
 add_action( 'bp_actions', 'ddc_catch_add_remove_requests' );
+
+/**
+ * Implementation of BP_Component.
+ *
+ * Integrates into user profiles.
+ *
+ * @since 1.0
+ */
+class DiRT_Directory_Client_Component extends BP_Component {
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0
+	 */
+	public function __construct() {
+		parent::start(
+			'ddc',
+			__( 'DiRT Directory', 'dirt-directory-client' ),
+			DDC_PLUGIN_DIR
+		);
+	}
+
+	/**
+	 * Set up global data.
+	 *
+	 * @since 1.0
+	 */
+	public function setup_globals( $args = array() ) {
+		parent::setup_globals( array(
+			'slug'          => 'dirt',
+			'has_directory' => false,
+		) );
+	}
+
+	/**
+	 * Set up nav items.
+	 *
+	 * @since 1.0
+	 */
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
+		$main_nav = array(
+			'name' => __( 'DiRT Directory', 'dirt-directory-client' ),
+			'slug' => $this->slug,
+			'position' => 83,
+			'screen_function' => array( $this, 'template_loader' ),
+			'default_subnav_slug' => 'tools',
+		);
+
+		$sub_nav[] = array(
+			'name' => __( 'Tools', 'dirt-directory-client' ),
+			'slug' => 'tools',
+			'parent_url' => bp_displayed_user_domain() . $this->slug . '/',
+			'parent_slug' => $this->slug,
+			'screen_function' => array( $this, 'template_loader' )
+		);
+
+		parent::setup_nav( $main_nav, $sub_nav );
+	}
+
+	/**
+	 * Template loader.
+	 *
+	 * @since 1.0
+	 */
+	public function template_loader() {
+		add_action( 'bp_template_content', array( $this, 'template_content_loader' ) );
+		wp_enqueue_style( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/css/screen.css' );
+		wp_enqueue_script( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/js/ddc.js', array( 'jquery' ) );
+		bp_core_load_template( 'members/single/plugins' );
+	}
+
+	/**
+	 * Template content loader.
+	 *
+	 * @since 1.0
+	 */
+	public function template_content_loader() {
+		bp_get_template_part( 'dirt/member' );
+	}
+}
+
+/**
+ * Bootstrap the BP_Component.
+ *
+ * @since 1.0
+ */
+function ddc_component_bootstrap() {
+	buddypress()->ddc = new DiRT_Directory_Client_Component();
+}
+ddc_component_bootstrap();
