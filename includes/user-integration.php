@@ -238,6 +238,35 @@ function ddc_get_tools_of_user( $user_id, $args = array() ) {
 	return $tools_query->posts;
 }
 
+/**
+ * Get tools in use on the site..
+ *
+ * @since 1.0
+ *
+ * @return array
+ */
+function ddc_get_tools_in_use( $args = array() ) {
+	$r = array_merge( array(
+		'posts_per_page' => -1,
+	), $args );
+
+	// Allow regular WP_Query stuff to get passed through.
+	$tools_query_args = array_merge( array(
+		'post_type' => 'ddc_tool',
+		'post_status' => 'publish',
+	), $r );
+
+	$tools_query = new WP_Query( $tools_query_args );
+
+	// Add DiRT-specific info to post objects
+	foreach ( $tools_query->posts as &$post ) {
+		$post->dirt_node_id = get_post_meta( $post->ID, 'dirt_node_id', true );
+		$post->dirt_link    = get_post_meta( $post->ID, 'dirt_link', true );
+	}
+
+	return $tools_query->posts;
+}
+
 /** Action functions *********************************************************/
 
 /**

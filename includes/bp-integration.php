@@ -19,6 +19,10 @@ function ddc_load_bp_integration() {
 		require DDC_PLUGIN_DIR . 'includes/bp-groups-integration.php';
 		bp_register_group_extension( 'DDC_Group_Extension' );
 	}
+
+	if ( class_exists( 'BPBD' ) ) {
+		require DDC_PLUGIN_DIR . 'includes/bpbd-integration.php';
+	}
 }
 add_action( 'bp_loaded', 'ddc_load_bp_integration', 20 );
 

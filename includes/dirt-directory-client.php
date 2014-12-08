@@ -11,7 +11,7 @@ class DiRT_Directory_Client {
 	 *
 	 * @var string
 	 */
-	public $api_base = 'http://dev.bamboodirt.gotpantheon.com/services/';
+	public $api_base = DDC_ENDPOINT_URL;
 
 	/**
 	 * Endpoint URL chunk.

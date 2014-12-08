@@ -13,6 +13,10 @@ Domain Path: /languages
 define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+if ( ! defined( 'DDC_ENDPOINT_URL' ) ) {
+	define( 'DDC_ENDPOINT_URL', 'http://dev.bamboodirt.gotpantheon.com/services/' );
+}
+
 function ddc_include() {
 	require DDC_PLUGIN_DIR . 'includes/dirt-directory-client.php';
 	require DDC_PLUGIN_DIR . 'includes/bp-integration.php';
