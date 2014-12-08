@@ -8,7 +8,7 @@
  * Add DiRT fields to the filter form.
  */
 function ddc_bpbd_filterable_fields( $fields ) {
-	$fields['dirt'] = array(
+	$fields['dirt-tools'] = array(
 		'id' => 'dirt-tools',
 		'name' => __( 'DiRT Tools', 'dirt-directory-client' ),
 		'type' => 'checkbox',
@@ -18,6 +18,41 @@ function ddc_bpbd_filterable_fields( $fields ) {
 	return $fields;
 }
 add_action( 'bpbd_filterable_fields', 'ddc_bpbd_filterable_fields' );
+
+/**
+ * Filter user queries as necessary.
+ *
+ * We'll convert to an 'include' array.
+ */
+function ddc_bpbd_filter_user_query( BP_User_Query $bp_user_query ) {
+	if ( empty( $_GET['bpbd-filter-dirt-tools'] ) ) {
+		return;
+	}
+
+	foreach ( (array) $_GET['bpbd-filter-dirt-tools'] as $tool_id ) {
+		$tool_id = intval( $tool_id );
+
+		// Skipping the DDC function because we don't need the extra info.
+		$user_terms = wp_get_object_terms( $tool_id, 'ddc_tool_is_used_by_user' );
+		$user_ids = array();
+		foreach ( $user_terms as $user_term ) {
+			$user_ids[] = ddc_get_user_id_from_usedby_term_slug( $user_term->slug );
+		}
+	}
+
+	error_log( print_r( $user_ids, true ) );
+	if ( ! empty( $user_ids ) ) {
+		$include = $bp_user_query->query_vars['include'];
+
+		if ( ! empty( $include ) ) {
+			$include = (array) $include;
+			$bp_user_query->query_vars['include'] = array_intersect( $user_ids, $include );
+		} else {
+			$bp_user_query->query_vars['include'] = $user_ids;
+		}
+	}
+}
+add_action( 'bp_pre_user_query_construct', 'ddc_bpbd_filter_user_query' );
 
 /**
  * Provide our own render logic for BPBD filter.
