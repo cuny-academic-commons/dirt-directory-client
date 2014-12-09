@@ -5,6 +5,7 @@
 	<p>
 		<label for="dirt-search"><?php _e( 'Find tools from the DiRT Directory', 'dirt-directory-client' ) ?></label>
 		<input type="text" name="dirt-search" id="dirt-search" value="<?php echo esc_attr( $search_terms ) ?>" />
+		<input type="submit" value="<?php _e( 'Search', 'dirt-directory-client' ) ?>" />
 	</p>
 
 	<?php if ( $search_terms ) : ?>
