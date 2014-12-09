@@ -11,7 +11,7 @@
 		<h3><?php printf( __( '%s&#8217;s Tools', 'dirt-directory-client' ), bp_core_get_user_displayname( bp_displayed_user_id() ) ) ?></h3>
 	<?php endif; ?>
 
-	<p><?php printf( _n( '%s uses %s tool from the <a href="http://dirtdirectory.org">DiRT Directory</a>:', '%s use %s tools from the <a href="http://dirtdirectory.org">DiRT Directory</a>:', count( $member_tools ), 'dirt-directory-client' ), bp_core_get_user_displayname( bp_displayed_user_id() ), number_format_i18n( count( $member_tools ) ) ) ?></p>
+	<p><?php printf( _n( '%s uses %s tool from the <a href="http://dirtdirectory.org">DiRT Directory</a>:', '%s uses %s tools from the <a href="http://dirtdirectory.org">DiRT Directory</a>:', count( $member_tools ), 'dirt-directory-client' ), bp_core_get_user_displayname( bp_displayed_user_id() ), number_format_i18n( count( $member_tools ) ) ) ?></p>
 	<ul class="dirt-tools dirt-tools-of-group">
 	<?php foreach ( $member_tools as $member_tool ) : ?>
 		<li><?php echo ddc_tool_markup( array(
