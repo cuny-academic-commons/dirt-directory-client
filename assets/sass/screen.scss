@@ -10,6 +10,24 @@ ul.dirt-tools {
 		padding: 10px;
 		position: relative;
 		border: 1px solid #eaeaea;
+
+		& > div, & > div {
+			margin-left: 100px;
+
+			&.dirt-tool-image {
+				margin-left: 0;
+			}
+		}
+	}
+
+	.dirt-tool-image {
+		float: left;
+		width: 100px;
+
+		img {
+			max-width: 80px;
+			max-height: 80px;
+		}
 	}
 
 	.dirt-tool-name {

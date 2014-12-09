@@ -23,6 +23,8 @@
 					'title' => $search_result->title,
 					'node_id' => $search_result->node->nid,
 					'snippet' => $search_result->snippet,
+					'thumbnail' => $search_result->node->field_logo->und[0]->filename,
+					'image' => $search_result->node->field_logo->und[0]->uri,
 				) ) ?></li>
 			<?php endforeach; ?>
 			</ol>

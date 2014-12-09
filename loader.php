@@ -13,8 +13,16 @@ Domain Path: /languages
 define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+if ( ! defined( 'DDC_ENDPOINT_BASE' ) ) {
+	define( 'DDC_ENDPOINT_BASE', 'http://dev.bamboodirt.gotpantheon.com/' );
+}
+
 if ( ! defined( 'DDC_ENDPOINT_URL' ) ) {
-	define( 'DDC_ENDPOINT_URL', 'http://dev.bamboodirt.gotpantheon.com/services/' );
+	define( 'DDC_ENDPOINT_URL', DDC_ENDPOINT_BASE . 'services/' );
+}
+
+if ( ! defined( 'DDC_IMAGE_BASE' ) ) {
+	define( 'DDC_IMAGE_BASE', DDC_ENDPOINT_BASE . 'sites/default/files/' );
 }
 
 function ddc_include() {

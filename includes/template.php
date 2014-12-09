@@ -20,6 +20,19 @@
 function ddc_tool_markup( $tool_data ) {
 	$html = '';
 
+	// Tool image
+	if ( ! empty( $tool_data['thumbnail'] ) && 'dirt_logo_default.png' !== $tool_data['thumbnail'] ) {
+		$image_url = DDC_IMAGE_BASE . 'styles/thumbnail/public/logos/' . $tool_data['thumbnail'];
+	} else {
+		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $tool_data['image'] );
+	}
+
+	$html .= sprintf(
+		'<div class="dirt-tool-image"><a href="%s"><img src="%s" /></a></div>',
+		esc_attr( $tool_data['link'] ),
+		esc_attr( $image_url )
+	);
+
 	// Tool name
 	$html .= sprintf(
 		'<div class="dirt-tool-name"><a href="%s">%s</a></div>',
