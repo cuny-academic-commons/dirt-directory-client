@@ -91,6 +91,8 @@ function ddc_create_tool( $args = array() ) {
 		'title' => '',
 		'link' => '',
 		'node_id' => 0,
+		'thumbnail' => '',
+		'image' => '',
 	), $args );
 
 	// No checking for dupes
@@ -105,6 +107,8 @@ function ddc_create_tool( $args = array() ) {
 	if ( $tool_id ) {
 		update_post_meta( $tool_id, 'dirt_link', $r['link'] );
 		update_post_meta( $tool_id, 'dirt_node_id', $r['node_id'] );
+		update_post_meta( $tool_id, 'dirt_thumbnail', $r['thumbnail'] );
+		update_post_meta( $tool_id, 'dirt_image', $r['image'] );
 	}
 
 	return $tool_id;
@@ -231,8 +235,10 @@ function ddc_get_tools_of_user( $user_id, $args = array() ) {
 
 	// Add DiRT-specific info to post objects
 	foreach ( $tools_query->posts as &$post ) {
-		$post->dirt_node_id = get_post_meta( $post->ID, 'dirt_node_id', true );
-		$post->dirt_link    = get_post_meta( $post->ID, 'dirt_link', true );
+		$post->dirt_node_id   = get_post_meta( $post->ID, 'dirt_node_id', true );
+		$post->dirt_link      = get_post_meta( $post->ID, 'dirt_link', true );
+		$post->dirt_thumbnail = get_post_meta( $post->ID, 'dirt_thumbnail', true );
+		$post->dirt_image     = get_post_meta( $post->ID, 'dirt_image', true );
 	}
 
 	return $tools_query->posts;
@@ -324,9 +330,11 @@ function ddc_catch_add_remove_requests() {
 			$tool_data = $c->get_item_by_node_id( $tool_node_id );
 			if ( ! empty( $tool_data ) ) {
 				$tool_id = ddc_create_tool( array(
-					'title'   => $tool_data->title,
-					'link'    => $tool_data->path,
-					'node_id' => $tool_node_id,
+					'title'     => $tool_data->title,
+					'link'      => $tool_data->path,
+					'node_id'   => $tool_node_id,
+					'thumbnail' => $tool_data->node->field_logo->und[0]->filename,
+					'image'     => $tool_data->node->field_logo->und[0]->uri,
 				) );
 
 				$tool = get_post( $tool_id );
