@@ -211,6 +211,7 @@ function ddc_get_tools_used_by_group( $group_id = null ) {
 	$group_member_query = new BP_Group_Member_Query( array(
 		'group_id' => $group_id,
 		'type' => 'alphabetical',
+		'group_role' => array( 'admin', 'mod', 'member' ),
 	) );
 
 	$group_member_tools = array();
