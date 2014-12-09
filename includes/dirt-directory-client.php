@@ -99,7 +99,9 @@ class DiRT_Directory_Client {
 	public function request() {
 		$uri = $this->get_request_uri();
 
-		$response = wp_remote_get( $uri );
+		$response = wp_remote_get( $uri, array(
+			'timeout' => 30,
+		) );
 		$response_body = wp_remote_retrieve_body( $response );
 		return json_decode( $response_body );
 	}

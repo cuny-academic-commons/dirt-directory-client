@@ -40,7 +40,6 @@ function ddc_bpbd_filter_user_query( BP_User_Query $bp_user_query ) {
 		}
 	}
 
-	error_log( print_r( $user_ids, true ) );
 	if ( ! empty( $user_ids ) ) {
 		$include = $bp_user_query->query_vars['include'];
 
