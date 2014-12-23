@@ -169,7 +169,7 @@ function ddc_get_tool( $by, $value ) {
  * @param int $tool_id
  * @return bool|array $users False on failure, users on success.
  */
-function ddc_get_users_of_tool( $tool_id, $args ) {
+function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	$args = array_merge( array(
 		'group_id' => false,
 		'include_self' => true,
