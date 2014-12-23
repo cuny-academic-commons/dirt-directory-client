@@ -170,14 +170,18 @@ function ddc_get_tool( $by, $value ) {
  * @return bool|array $users False on failure, users on success.
  */
 function ddc_get_users_of_tool( $tool_id, $args ) {
+	$args = array_merge( array(
+		'group_id' => false,
+		'include_self' => true,
+	), $args );
+
 	$terms = wp_get_object_terms( $tool_id, 'ddc_tool_is_used_by_user' );
 
 	$user_ids = array( 0 );
 	foreach ( $terms as $term ) {
 		$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
 
-		// If limiting to a group, check that the user is a member
-		// first
+		// If limiting to a group, check that the user is a member first.
 		if ( ! empty( $args['group_id'] ) && bp_is_active( 'groups' ) ) {
 			if ( ! isset( $group_members ) ) {
 				$group_member_query = new BP_Group_Member_Query( array(
@@ -191,7 +195,7 @@ function ddc_get_users_of_tool( $tool_id, $args ) {
 				$group_members = wp_list_pluck( $group_member_query->results, 'ID' );
 			}
 
-			if ( ! in_array( $user_id, $group_members ) ) {
+			if ( ! in_array( $user_id, $group_members ) && ( ! $args['include_self'] || $user_id != bp_loggedin_user_id() ) ) {
 				continue;
 			}
 		}
