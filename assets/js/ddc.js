@@ -1,7 +1,10 @@
 window.wp = window.wp || {};
 
 ( function( $ ) {
-	var $clicked,
+	var tool_id,
+		$clicked,
+		$current_checkbox,
+		$current_tool,
 		$tools,
 		$tool_users_toggles;
 
@@ -12,6 +15,8 @@ window.wp = window.wp || {};
 		$tools = $( '.dirt-tools' );
 
 		init_tool_users_toggle();
+
+		init_tool_checkboxes();
 	} );
 
 	/**
@@ -29,6 +34,42 @@ window.wp = window.wp || {};
 			$clicked.siblings( '.dirt-tool-users-toggle-link' ).show();
 			$clicked.hide();
 			return false;
+		} );
+	}
+
+	/**
+	 * Initialize the "I use this" checkbox toggles.
+	 */
+	function init_tool_checkboxes() {
+		$tools.find( '.dirt-tool-action' ).each( function() {
+			$current_tool = $(this);
+			$current_tool.find( 'input[type="checkbox"], label' ).on( 'click', function( e ) {
+				e.preventDefault();
+
+				$current_checkbox = $(this).closest( '.dirt-tool-action' ).find( 'input[type="checkbox"]' );
+				tool_id = $current_checkbox.data( 'tool-id' );
+
+				$.ajax( {
+					url: ajaxurl,
+					method: 'GET',
+					data: {
+						'tool_id': tool_id,
+						'action': 'ddc_tool_use_toggle',
+						'tool_node_id': $current_checkbox.data( 'tool-node-id' ),
+						'nonce': $current_checkbox.data( 'nonce' ),
+						'toggle': $current_checkbox.is( ':checked' ) ? 'remove' : 'add'
+					},
+					success: function( response ) {
+						if ( response.success ) {
+							if ( 'add' == response.data.toggle ) {
+								$current_checkbox.attr( 'checked', true );
+							} else {
+								$current_checkbox.removeAttr( 'checked' );
+							}
+						}
+					}
+				} );
+			} );
 		} );
 	}
 } )( jQuery );

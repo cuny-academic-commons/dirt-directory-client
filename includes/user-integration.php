@@ -285,6 +285,7 @@ function ddc_catch_add_remove_requests() {
 		return;
 	}
 
+	$tool_id = $tool_node_id = false;
 	if ( ! empty( $_GET['add_dirt_tool'] ) ) {
 		$action       = 'add';
 		$url_action   = 'add_dirt_tool';
@@ -316,31 +317,7 @@ function ddc_catch_add_remove_requests() {
 	}
 
 	// If we've gotten this far, process the request
-
-	// Tool IDs are passed on remove actions
-	if ( ! empty( $tool_id ) ) {
-		$tool = get_post( $tool_id );
-
-	// When adding tools, we look up by nid, in case a new tool
-	// has to be created
-	} else {
-		$tool = ddc_get_tool( 'node_id', $tool_node_id );
-		if ( empty( $tool ) ) {
-			$c = new DiRT_Directory_Client();
-			$tool_data = $c->get_item_by_node_id( $tool_node_id );
-			if ( ! empty( $tool_data ) ) {
-				$tool_id = ddc_create_tool( array(
-					'title'     => $tool_data->title,
-					'link'      => $tool_data->path,
-					'node_id'   => $tool_node_id,
-					'thumbnail' => $tool_data->node->field_logo->und[0]->filename,
-					'image'     => $tool_data->node->field_logo->und[0]->uri,
-				) );
-
-				$tool = get_post( $tool_id );
-			}
-		}
-	}
+	$tool = ddc_get_tool_by_identifier( $tool_id, $tool_node_id );
 
 	if ( empty( $tool ) ) {
 		bp_core_add_message( 'Could not find tool.', 'error' );

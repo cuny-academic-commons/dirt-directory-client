@@ -42,6 +42,11 @@ function ddc_tool_markup( $tool_data ) {
 
 	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
 
+	$tool_id = false;
+	if ( $tool ) {
+		$tool_id = $tool->ID;
+	}
+
 	$used_by_users = array();
 	if ( ! empty( $tool ) ) {
 		$args = array();
@@ -56,18 +61,24 @@ function ddc_tool_markup( $tool_data ) {
 	$url_base = bp_get_requested_url();
 	if ( is_user_logged_in() ) {
 		if ( in_array( bp_loggedin_user_id(), wp_list_pluck( $used_by_users, 'ID' ) ) ) {
-			$url_base = add_query_arg( 'remove_dirt_tool', $tool->ID );
+			$url_base = add_query_arg( 'remove_dirt_tool', $tool_data['node_id'] );
 			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-remove"><a href="%s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%s</span><i class="genericon genericon-star"></i></a></div>',
+				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d"><a href="%2$s">I use this</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
+				$tool_id,
 				wp_nonce_url( $url_base, 'ddc_remove_tool' ),
-				__( 'Remove?', 'dirt-directory-client' )
+				__( 'Click to remove this tool from your list', 'dirt-directory-client' ),
+				wp_create_nonce( 'ddc_toggle_tool_' . $tool_data['node_id'] ),
+				$tool_data['node_id']
 			);
 		} else {
 			$url_base = add_query_arg( 'add_dirt_tool', $tool_data['node_id'] );
 			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-add"><a href="%s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%s</span><i class="genericon genericon-star"></i></a></div>',
+				'<div class="dirt-tool-action dirt-tool-action-add"><label for="dirt-tool-add-%1$d"><a href="%2$s">I use this</a></label> <input type="checkbox" value="%d" name="dirt-tool-add[%1$d]" id="dirt-tool-add-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%3$s</span></div>',
+				$tool_id,
 				wp_nonce_url( $url_base, 'ddc_add_tool' ),
-				__( 'I use this!', 'dirt-directory-client' )
+				__( 'Click to show that you use this tool', 'dirt-directory-client' ),
+				wp_create_nonce( 'ddc_toggle_tool_' . $tool_data['node_id'] ),
+				$tool_data['node_id']
 			);
 		}
 

@@ -63,3 +63,77 @@ function ddc_add_to_template_stack( $stack ) {
 	return $stack;
 }
 add_filter( 'bp_get_template_stack', 'ddc_add_to_template_stack' );
+
+/**
+ * AJAX callback for tool use toggle.
+ *
+ * @since 1.0
+ */
+function ddc_tool_use_toggle_ajax_cb() {
+	$data = array(
+		'nonce' => '',
+		'tool_id' => '',
+		'toggle' => '',
+		'tool_node_id' => '',
+	);
+
+	foreach ( $data as $dkey => &$dvalue ) {
+		if ( isset( $_GET[ $dkey ] ) ) {
+			$dvalue = stripslashes( $_GET[ $dkey ] );
+		}
+	}
+
+	// Nonce check.
+	if ( ! wp_verify_nonce( $data['nonce'], "ddc_toggle_tool_{$data['tool_node_id']}" ) ) {
+		wp_send_json_error( __( 'Could not perform requested action.', 'dirt-directory-client' ) );
+	}
+
+	$tool = ddc_get_tool_by_identifier( $data['tool_id'], $data['tool_node_id'] );
+
+	if ( ! $tool ) {
+		wp_send_json_error( __( 'Could not find tool.', 'dirt-directory-client' ) );
+	}
+
+	$success = false;
+	$message = __( 'Could not perform requested action', 'dirt-directory-client' );
+
+	switch ( $data['toggle'] ) {
+		case 'remove' :
+			$removed = ddc_dissociate_tool_from_user( $tool->ID, bp_loggedin_user_id() );
+
+			if ( $removed ) {
+				$message = __( 'You have successfully removed this tool.', 'dirt-directory-client' );
+				$success = true;
+			} else {
+				$message = __( 'There was a problem removing this tool.', 'dirt-directory-client' );
+				$success = false;
+			}
+
+			break;
+
+		case 'add' :
+			$added = ddc_associate_tool_with_user( $tool->ID, bp_loggedin_user_id() );
+
+			if ( $added ) {
+				$message = __( 'You have successfully added this tool.', 'dirt-directory-client' );
+				$success = true;
+			} else {
+				$message = __( 'There was a problem adding this tool.', 'dirt-directory-client' );
+				$success = false;
+			}
+
+			break;
+	}
+
+	$retval = array(
+		'message' => $message,
+		'toggle' => $data['toggle'],
+	);
+
+	if ( $success ) {
+		wp_send_json_success( $retval );
+	} else {
+		wp_send_json_error( $retval );
+	}
+}
+add_action( 'wp_ajax_ddc_tool_use_toggle', 'ddc_tool_use_toggle_ajax_cb' );

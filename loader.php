@@ -25,6 +25,8 @@ if ( ! defined( 'DDC_IMAGE_BASE' ) ) {
 	define( 'DDC_IMAGE_BASE', DDC_ENDPOINT_BASE . 'sites/default/files/' );
 }
 
+require DDC_PLUGIN_DIR . 'includes/functions.php';
+
 function ddc_include() {
 	require DDC_PLUGIN_DIR . 'includes/dirt-directory-client.php';
 	require DDC_PLUGIN_DIR . 'includes/bp-integration.php';
