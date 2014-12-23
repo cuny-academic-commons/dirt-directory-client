@@ -114,10 +114,19 @@ function ddc_tool_markup( $tool_data ) {
 
 		if ( ! empty( $used_by_list_items ) ) {
 			$used_by_list_item_count = count( $used_by_list_items );
+
+			if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
+				$show_text = sprintf( _n( 'Show Group User', 'Show Group Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+				$hide_text = sprintf( _n( 'Hide Group User', 'Hide Group Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+			} else {
+				$show_text = sprintf( _n( 'Show User', 'Show All Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+				$hide_text = sprintf( _n( 'Hide User', 'Hide All Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+			}
+
 			$html .= sprintf(
 				'<div class="dirt-tool-users-toggle"><a class="dirt-tool-users-toggle-link dirt-tools-users-toggle-link-show" href="#">%s</a><a class="dirt-tool-users-toggle-link dirt-tool-users-toggle-link-hide" href="#">%s</a></div><ul class="dirt-tool-users">%s</ul>',
-				sprintf( _n( 'Show User', 'Show Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) ),
-				sprintf( _n( 'Hide User', 'Hide Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) ),
+				$show_text,
+				$hide_text,
 				implode( "\n", $used_by_list_items )
 			);
 		}
