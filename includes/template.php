@@ -34,10 +34,16 @@ function ddc_tool_markup( $tool_data ) {
 	);
 
 	// Tool name
+	$link = $tool_data['link'];
+	if ( ! $link ) {
+		$link = 'http://dirtdirectory.org/node/' . $tool_data['node_id'];
+	}
+
 	$html .= sprintf(
-		'<div class="dirt-tool-name"><a href="%s">%s</a></div>',
-		esc_attr( $tool_data['link'] ),
-		esc_html( $tool_data['title'] )
+		'<div class="dirt-tool-name">%s <a class="dirt-external-link" target="_blank" href="%s">%s</a></div>',
+		esc_html( $tool_data['title'] ),
+		esc_attr( $link ),
+		__( 'View on the DiRT Directory', 'dirt-directory-client' )
 	);
 
 	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
