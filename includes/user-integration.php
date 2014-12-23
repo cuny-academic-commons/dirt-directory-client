@@ -456,8 +456,8 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 */
 	public function template_loader() {
 		add_action( 'bp_template_content', array( $this, 'template_content_loader' ) );
-		wp_enqueue_style( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/css/screen.css' );
-		wp_enqueue_script( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/js/ddc.js', array( 'jquery' ) );
+		wp_enqueue_style( 'dirt-directory-client' );
+		wp_enqueue_script( 'dirt-directory-client' );
 		bp_core_load_template( 'members/single/plugins' );
 	}
 

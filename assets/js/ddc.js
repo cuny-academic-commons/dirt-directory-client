@@ -63,8 +63,10 @@ window.wp = window.wp || {};
 						if ( response.success ) {
 							if ( 'add' == response.data.toggle ) {
 								$current_checkbox.attr( 'checked', true );
+								$current_checkbox.closest( '.dirt-tool-action' ).find( '.dirt-tool-action-question' ).html( DDC.remove_gloss );
 							} else {
 								$current_checkbox.removeAttr( 'checked' );
+								$current_checkbox.closest( '.dirt-tool-action' ).find( '.dirt-tool-action-question' ).html( DDC.add_gloss );
 							}
 						}
 					}

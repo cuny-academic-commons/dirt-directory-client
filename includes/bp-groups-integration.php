@@ -88,8 +88,8 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id
 	 */
 	public function display( $group_id = null ) {
-		wp_enqueue_style( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/css/screen.css' );
-		wp_enqueue_script( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/js/ddc.js', array( 'jquery' ) );
+		wp_enqueue_style( 'dirt-directory-client' );
+		wp_enqueue_script( 'dirt-directory-client' );
 
 		bp_get_template_part( 'dirt/group' );
 	}
