@@ -391,7 +391,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	public function __construct() {
 		parent::start(
 			'ddc',
-			__( 'DiRT Directory', 'dirt-directory-client' ),
+			__( 'Digital Research Tools', 'dirt-directory-client' ),
 			DDC_PLUGIN_DIR
 		);
 	}
@@ -415,7 +415,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		$main_nav = array(
-			'name' => __( 'DiRT Directory', 'dirt-directory-client' ),
+			'name' => __( 'Digital Research Tools', 'dirt-directory-client' ),
 			'slug' => $this->slug,
 			'position' => 83,
 			'screen_function' => array( $this, 'template_loader' ),

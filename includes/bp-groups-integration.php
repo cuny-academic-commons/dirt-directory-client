@@ -44,7 +44,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	 */
 	public function __construct() {
 		parent::init( array(
-			'name'   => __( 'DiRT Directory', 'dirt-directory-client' ),
+			'name'   => __( 'Digital Research Tools', 'dirt-directory-client' ),
 			'slug'   => 'dirt',
 			'access' => $this->access_setting(),
 			'screens' => array(
@@ -106,7 +106,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 
 		?>
 
-		<label for="dirt-enabled"><?php _e( 'Enable DiRT Directory tab for this group?', 'dirt-directory-client' ) ?></label>
+		<label for="dirt-enabled"><?php _e( 'Enable "Digital Research Tools" tab for this group?', 'dirt-directory-client' ) ?></label>
 		<select id="dirt-enabled" name="dirt-enabled">
 			<option value="1" <?php selected( '1', $settings['enabled'] ) ?>><?php _e( 'Enabled', 'dirt-directory-client' ) ?></option>
 			<option value="0" <?php selected( '0', $settings['enabled'] ) ?>><?php _e( 'Disabled', 'dirt-directory-client' ) ?></option>

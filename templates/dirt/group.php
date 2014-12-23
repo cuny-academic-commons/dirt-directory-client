@@ -1,4 +1,4 @@
-<h2><?php _e( 'DiRT Directory', 'dirt-directory-client' ) ?></h2>
+<h2><?php _e( 'Digital Research Tools', 'dirt-directory-client' ) ?></h2>
 
 <p><?php _e( 'The DiRT Directory is a registry of digital research tools for scholarly use.', 'dirt-directory-client' ) ?></p>
 
