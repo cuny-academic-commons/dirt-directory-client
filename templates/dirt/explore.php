@@ -2,35 +2,68 @@
 
 <form method="get" action="">
 	<?php $search_terms = isset( $_GET['dirt-search'] ) ? urldecode( $_GET['dirt-search'] ) : ''; ?>
+	<?php $cat_id = isset( $_GET['dirt-category'] ) ? intval( $_GET['dirt-category'] ) : ''; ?>
+	<p><?php _e( 'Find tools from the DiRT Directory:', 'dirt-directory-client' ) ?></p>
+
 	<p>
-		<label for="dirt-search"><?php _e( 'Find tools from the DiRT Directory', 'dirt-directory-client' ) ?></label>
-		<input type="text" name="dirt-search" id="dirt-search" value="<?php echo esc_attr( $search_terms ) ?>" />
-		<input type="submit" value="<?php _e( 'Search', 'dirt-directory-client' ) ?>" />
+		<label for="dirt-category" class="explore-type-label"><?php _e( 'By category', 'dirt-directory-client' ) ?></label>
+		<?php $categories = ddc_categories() ?>
+		<select name="dirt-category" id="dirt-category">
+			<option value=""></option>
+			<?php foreach ( $categories as $cat ) : ?>
+				<option value="<?php echo intval( $cat['tid'] ) ?>"><?php echo esc_html( $cat['name'] ) ?></option>
+			<?php endforeach ?>
+		</select>
+		<input class="dirt-explore-button" type="submit" value="<?php _e( 'Go', 'dirt-directory-client' ) ?>" />
 	</p>
 
-	<?php if ( $search_terms ) : ?>
-		<?php $search_results = ddc_query_tools( array(
+	<p>
+		<label for="dirt-search" class="explore-type-label"><?php _e( 'By keyword', 'dirt-directory-client' ) ?></label>
+		<input type="text" name="dirt-search" id="dirt-search" value="" />
+		<input class="dirt-explore-button" type="submit" value="<?php _e( 'Go', 'dirt-directory-client' ) ?>" />
+	</p>
+</form>
+
+<?php if ( $search_terms || $cat_id ) : ?>
+	<?php
+	if ( $search_terms ) {
+		$args = array(
 			'search_terms' => $search_terms,
 			'type' => 'search',
-		) ); ?>
+		);
 
-		<?php if ( ! empty( $search_results ) ) : ?>
-			<p><?php printf( __( 'We found these tools that match your query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>' ) ?></p>
+		$results_string = sprintf( __( 'We found these tools that match your query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>' );
+	} else if ( $cat_id ) {
+		$args = array(
+			'cat_id' => $cat_id,
+			'type' => 'category',
+		);
 
-			<ol class="dirt-tools">
-			<?php foreach ( $search_results as $search_result ) : ?>
-				<li><?php echo ddc_tool_markup( array(
-					'link' => $search_result->link,
-					'title' => $search_result->title,
-					'node_id' => $search_result->node->nid,
-					'snippet' => $search_result->snippet,
-					'thumbnail' => $search_result->node->field_logo->und[0]->filename,
-					'image' => $search_result->node->field_logo->und[0]->uri,
-				) ) ?></li>
-			<?php endforeach; ?>
-			</ol>
-		<?php else : ?>
-			<p><?php printf( __( 'We couldn&#8217;t find any tools that matched the following query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>') ?></p>
-		<?php endif; ?>
-	<?php endif ?>
-</form>
+		$cats = ddc_categories();
+		$cat_name = '';
+		foreach ( $cats as $cat ) {
+			if ( $cat['tid'] == $cat_id ) {
+				$cat_name = $cat['name'];
+				break;
+			}
+		}
+
+		$results_string = sprintf( __( 'We found these tools in the category: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $cat_name ) . '</span>' );
+	}
+
+	$search_results = ddc_query_tools( $args );
+
+	?>
+
+	<?php if ( ! empty( $search_results ) ) : ?>
+		<p><?php echo $results_string ?></p>
+
+		<ol class="dirt-tools">
+		<?php foreach ( $search_results as $search_result ) : ?>
+			<li><?php echo ddc_tool_markup( $search_result ) ?></li>
+		<?php endforeach; ?>
+		</ol>
+	<?php else : ?>
+		<p><?php printf( __( 'We couldn&#8217;t find any tools that matched the following query: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $search_terms ) . '</span>') ?></p>
+	<?php endif; ?>
+<?php endif ?>

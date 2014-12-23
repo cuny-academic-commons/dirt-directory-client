@@ -143,6 +143,15 @@ class DiRT_Directory_Client {
 	}
 
 	/**
+	 * Get a list of the items (nodes/tools) that match a given category.
+	 *
+	 * @param int $category_id
+	 */
+	public function get_items_for_category( $category_id ) {
+		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[field_categories]', intval( $category_id ) )->request();
+	}
+
+	/**
 	 * Get a list of tools that match a search term.
 	 *
 	 * @param string $search_term
@@ -179,8 +188,58 @@ function ddc_query_tools( $args ) {
 			}
 
 			$tools = $c->get_items_by_search_term( $args['search_terms'] );
+			break;
+
+		case 'category' :
+			if ( empty( $args['cat_id'] ) ) {
+				return $tools;
+			}
+
+			$tools = $c->get_items_for_category( $args['cat_id'] );
+			break;
 	}
 
-	return $tools;
+	// Normalize. This is awful.
+	$parsed_tools = array();
+	foreach ( $tools as $tool ) {
+		$_tool = array(
+			'node_id' => '',
+			'title' => '',
+			'link' => '',
+			'snippet' => '',
+			'thumbnail' => '',
+			'image' => '',
+		);
+
+		if ( isset( $tool->node->nid ) ) {
+			$_tool['node_id'] = $tool->node->nid;
+		} else if ( isset( $tool->nid ) ) {
+			$_tool['node_id'] = $tool->nid;
+		}
+
+		$_tool['title'] = $tool->title;
+
+		if ( isset( $tool->link ) ) {
+			$_tool['link'] = $tool->link;
+		} else if ( $_tool['node_id'] ) {
+			$_tool['link'] = 'http://dirtdirectory.org/node/' . $_tool['node_id'];
+		}
+
+		if ( isset( $tool->snippet ) ) {
+			$_tool['snippet'] = $tool->snippet;
+		}
+
+		if ( isset( $tool->node->field_logo->und[0]->filename ) ) {
+			$_tool['thumbnail'] = $tool->node->field_logo->und[0]->filename;
+		}
+
+		if ( isset( $tool->node->field_logo->und[0]->uri ) ) {
+			$_tool['image'] = $tool->node->field_logo->und[0]->uri;
+		}
+
+		$parsed_tools[] = $_tool;
+	}
+
+	return $parsed_tools;
 }
 

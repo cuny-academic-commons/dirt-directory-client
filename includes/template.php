@@ -140,3 +140,38 @@ function ddc_tool_markup( $tool_data ) {
 
 	return $html;
 }
+
+function ddc_categories() {
+	// @todo Better cache busting.
+	$cats = get_option( 'ddc_categories' );
+
+	if ( ! $cats ) {
+		$cats = array();
+
+		$c = new DiRT_Directory_Client();
+		$taxonomies = $c->get_taxonomies();
+		$cat_vid = 0;
+		foreach ( $taxonomies as $tax ) {
+			if ( 'categories' === $tax->machine_name ) {
+				$cat_vid = $tax->vid;
+				break;
+			}
+		}
+
+		if ( ! $cat_vid ) {
+		//	update_option( 'ddc_categories', $cats );
+		}
+
+		$categories = $c->get_taxonomy_terms( $cat_vid );
+		foreach ( $categories as $category ) {
+			$cats[] = array(
+				'tid' => $category->tid,
+				'name' => $category->name,
+			);
+		}
+
+		update_option( 'ddc_categories', $cats );
+	}
+
+	return $cats;
+}
