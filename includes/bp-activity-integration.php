@@ -23,7 +23,11 @@ add_action( 'bp_register_activity_actions', 'ddc_register_activity_actions' );
  * @since 1.0
  */
 function ddc_format_activity_action_tool_marked_used( $action, $activity ) {
-	$user_link = bp_core_get_userlink( $activity->user_id );
+	$user_link = sprintf(
+		'<a href="%s">%s</a>',
+		bp_core_get_user_domain( $activity->user_id ) . 'dirt/',
+		bp_core_get_user_displayname( $activity->user_id )
+	);
 
 	$tool = get_post( $activity->item_id );
 
