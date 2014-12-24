@@ -20,6 +20,10 @@ function ddc_load_bp_integration() {
 		bp_register_group_extension( 'DDC_Group_Extension' );
 	}
 
+	if ( bp_is_active( 'groups' ) ) {
+		require DDC_PLUGIN_DIR . 'includes/bp-activity-integration.php';
+	}
+
 	if ( class_exists( 'BPBD' ) ) {
 		require DDC_PLUGIN_DIR . 'includes/bpbd-integration.php';
 	}

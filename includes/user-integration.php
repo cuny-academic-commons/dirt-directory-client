@@ -19,6 +19,7 @@ function ddc_associate_tool_with_user( $tool_id, $user_id ) {
 	$tt_ids = wp_set_object_terms( $tool_id, ddc_get_user_term( $user_id ), 'ddc_tool_is_used_by_user', true );
 
 	if ( ! empty( $tt_ids ) ) {
+		do_action( 'ddc_associated_tool_with_user', $tool_id, $user_id, $tt_ids );
 		return true;
 	} else {
 		return false;
@@ -49,6 +50,8 @@ function ddc_dissociate_tool_from_user( $tool_id, $user_id ) {
 
 	// Don't append - overwrite
 	wp_set_object_terms( $tool_id, $new_terms, 'ddc_tool_is_used_by_user', false );
+
+	do_action( 'ddc_dissociated_tool_from_user', $tool_id, $user_id );
 
 	return true;
 }
