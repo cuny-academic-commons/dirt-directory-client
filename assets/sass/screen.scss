@@ -25,6 +25,8 @@
 
 ol.dirt-tools,
 ul.dirt-tools {
+	list-style-type: none;
+
 	& > li {
 		overflow: hidden;
 		margin: 0 0 2em;
