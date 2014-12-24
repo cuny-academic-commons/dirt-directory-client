@@ -209,6 +209,7 @@ function ddc_query_tools( $args ) {
 			'snippet' => '',
 			'thumbnail' => '',
 			'image' => '',
+			'description' => '',
 		);
 
 		if ( isset( $tool->node->nid ) ) {
@@ -235,6 +236,12 @@ function ddc_query_tools( $args ) {
 
 		if ( isset( $tool->node->field_logo->und[0]->uri ) ) {
 			$_tool['image'] = $tool->node->field_logo->und[0]->uri;
+		}
+
+		if ( isset( $tool->body->und[0]->value ) ) {
+			$_tool['description'] = $tool->body->und[0]->value;
+		} else if ( isset( $tool->node->body->und[0]->value ) ) {
+			$_tool['description'] = $tool->node->body->und[0]->value;
 		}
 
 		$parsed_tools[] = $_tool;

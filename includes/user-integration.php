@@ -96,6 +96,7 @@ function ddc_create_tool( $args = array() ) {
 		'node_id' => 0,
 		'thumbnail' => '',
 		'image' => '',
+		'description' => '',
 	), $args );
 
 	// No checking for dupes
@@ -105,6 +106,7 @@ function ddc_create_tool( $args = array() ) {
 		'post_type' => 'ddc_tool',
 		'post_title' => $r['title'],
 		'post_status' => 'publish',
+		'post_content' => $r['description'],
 	) );
 
 	if ( $tool_id ) {

@@ -34,16 +34,9 @@ function ddc_tool_markup( $tool_data ) {
 	);
 
 	// Tool name
-	$link = $tool_data['link'];
-	if ( ! $link ) {
-		$link = 'http://dirtdirectory.org/node/' . $tool_data['node_id'];
-	}
-
 	$html .= sprintf(
-		'<div class="dirt-tool-name">%s <a class="dirt-external-link" target="_blank" href="%s">%s</a></div>',
-		esc_html( $tool_data['title'] ),
-		esc_attr( $link ),
-		__( 'View on the DiRT Directory', 'dirt-directory-client' )
+		'<div class="dirt-tool-name">%s</div>',
+		esc_html( $tool_data['title'] )
 	);
 
 	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
@@ -92,11 +85,24 @@ function ddc_tool_markup( $tool_data ) {
 	}
 
 	// Tool description
-	$snippet = '';
-	if ( ! empty( $tool_data['snippet'] ) ) {
+	if ( ! empty( $tool_data['description'] ) ) {
+		$link = $tool_data['link'];
+		if ( ! $link ) {
+			$link = 'http://dirtdirectory.org/node/' . $tool_data['node_id'];
+		}
+
+		$description  = strip_tags( trim( $tool_data['description'] ) );
+		$description .= sprintf(
+			'<a class="dirt-external-link" target="_blank" href="%s">%s</a>',
+			esc_attr( $link ),
+			__( 'Learn more on DiRTDirectory.org', 'dirt-directory-client' )
+		);
+
 		$html .= sprintf(
-			'<div class="dirt-tool-description">%s</div>',
-			$tool_data['snippet'] // @todo Sanitize
+			'<div class="dirt-tool-description-toggle"><a class="dirt-tool-description-toggle-link dirt-tools-description-toggle-link-show" href="#">%s</a><a class="dirt-tool-description-toggle-link dirt-tool-description-toggle-link-hide" href="#">%s</a></div><div class="dirt-tool-description">%s</div>',
+			__( 'Show Description', 'dirt-directory-client' ),
+			__( 'Hide Description', 'dirt-directory-client' ),
+			wpautop( $description )
 		);
 	}
 

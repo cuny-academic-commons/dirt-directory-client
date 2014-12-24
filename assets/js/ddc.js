@@ -6,6 +6,7 @@ window.wp = window.wp || {};
 		$current_checkbox,
 		$current_tool,
 		$tools,
+		$tool_description_toggles,
 		$tool_users_toggles;
 
 	$( document ).ready( function() {
@@ -15,6 +16,7 @@ window.wp = window.wp || {};
 		$tools = $( '.dirt-tools' );
 
 		init_tool_users_toggle();
+		init_tool_description_toggle();
 
 		init_tool_checkboxes();
 	} );
@@ -37,6 +39,23 @@ window.wp = window.wp || {};
 		} );
 	}
 
+	/**
+	 * Initialize "descritpion" toggles
+	 */
+	function init_tool_description_toggle() {
+		$tools.find( '.dirt-tool-description-toggle-link-hide' ).hide();
+		$tools.find( '.dirt-tool-description' ).hide();
+
+		$tool_description_toggles = $( '.dirt-tool-description-toggle a' );
+
+		$tool_description_toggles.on( 'click', function() {
+			$clicked = $( this );
+			$clicked.closest( '.dirt-tools > li' ).find( '.dirt-tool-description' ).toggle();
+			$clicked.siblings( '.dirt-tool-description-toggle-link' ).show();
+			$clicked.hide();
+			return false;
+		} );
+	}
 	/**
 	 * Initialize the "I use this" checkbox toggles.
 	 */

@@ -18,6 +18,7 @@
 			'link' => $member_tool->dirt_link,
 			'title' => $member_tool->post_title,
 			'node_id' => $member_tool->dirt_node_id,
+			'description' => $member_tool->post_content,
 		) ) ?></li>
 	<?php endforeach; ?>
 	</ul>

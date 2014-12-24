@@ -13,6 +13,7 @@
 			'link' => $group_tool->dirt_link,
 			'title' => $group_tool->post_title,
 			'node_id' => $group_tool->dirt_node_id,
+			'description' => $group_tool->post_content,
 		) ) ?></li>
 	<?php endforeach; ?>
 	</ul>
