@@ -19,6 +19,8 @@
 		<input class="dirt-explore-button" type="submit" value="<?php _e( 'Go', 'dirt-directory-client' ) ?>" />
 	</p>
 
+	<p class="dirt-explore-or"><?php _e( 'or', 'dirt-directory-client' ) ?></p>
+
 	<p>
 		<label for="dirt-search" class="explore-type-label"><?php _e( 'By keyword', 'dirt-directory-client' ) ?></label>
 		<input type="text" name="dirt-search" id="dirt-search" value="" />
