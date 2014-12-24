@@ -1,7 +1,8 @@
 window.wp = window.wp || {};
 
 ( function( $ ) {
-	var tool_id,
+	var checked,
+		tool_id,
 		$clicked,
 		$current_checkbox,
 		$current_tool,
@@ -65,7 +66,16 @@ window.wp = window.wp || {};
 			$current_tool.find( 'input[type="checkbox"], label' ).on( 'click', function( e ) {
 				e.preventDefault();
 
-				$current_checkbox = $(this).closest( '.dirt-tool-action' ).find( 'input[type="checkbox"]' );
+				// Gah. Clicking on the input means that 'checked' gets disabled
+				// BEFORE we can check it, so we must flip
+				if ( this.tagName === 'INPUT' ) {
+					$current_checkbox = $(this);
+					checked = ! $current_checkbox.is( ':checked' );
+				} else {
+					$current_checkbox = $(this).closest( '.dirt-tool-action' ).find( 'input[type="checkbox"]' );
+					checked = $current_checkbox.is( ':checked' );
+				}
+
 				tool_id = $current_checkbox.data( 'tool-id' );
 
 				$.ajax( {
@@ -76,15 +86,15 @@ window.wp = window.wp || {};
 						'action': 'ddc_tool_use_toggle',
 						'tool_node_id': $current_checkbox.data( 'tool-node-id' ),
 						'nonce': $current_checkbox.data( 'nonce' ),
-						'toggle': $current_checkbox.is( ':checked' ) ? 'remove' : 'add'
+						'toggle': checked ? 'remove' : 'add'
 					},
 					success: function( response ) {
 						if ( response.success ) {
 							if ( 'add' == response.data.toggle ) {
-								$current_checkbox.attr( 'checked', true );
+								$current_checkbox.prop( 'checked', true );
 								$current_checkbox.closest( '.dirt-tool-action' ).find( '.dirt-tool-action-question' ).html( DDC.remove_gloss );
 							} else {
-								$current_checkbox.removeAttr( 'checked' );
+								$current_checkbox.removeProp( 'checked' );
 								$current_checkbox.closest( '.dirt-tool-action' ).find( '.dirt-tool-action-question' ).html( DDC.add_gloss );
 							}
 						}
