@@ -14,6 +14,7 @@
 function ddc_load_bp_integration() {
 	require DDC_PLUGIN_DIR . 'includes/template.php';
 	require DDC_PLUGIN_DIR . 'includes/user-integration.php';
+	require DDC_PLUGIN_DIR . 'includes/theme-compatibility.php';
 
 	if ( bp_is_active( 'groups' ) ) {
 		require DDC_PLUGIN_DIR . 'includes/bp-groups-integration.php';
