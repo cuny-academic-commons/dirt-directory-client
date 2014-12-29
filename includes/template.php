@@ -27,10 +27,18 @@ function ddc_tool_markup( $tool_data ) {
 		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $tool_data['image'] );
 	}
 
+	$img_tag = '';
+	if ( $image_url ) {
+		$img_tag = sprintf(
+			'<a href="%s"><img src="%s" /></a>',
+			esc_attr( $tool_data['link'] ),
+			esc_attr( $image_url )
+		);
+	}
+
 	$html .= sprintf(
-		'<div class="dirt-tool-image"><a href="%s"><img src="%s" /></a></div>',
-		esc_attr( $tool_data['link'] ),
-		esc_attr( $image_url )
+		'<div class="dirt-tool-image">%s</div>',
+		$img_tag
 	);
 
 	// Tool name
