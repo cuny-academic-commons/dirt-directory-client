@@ -31,28 +31,9 @@ function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 			$c = new DiRT_Directory_Client();
 			$tool_data = $c->get_item_by_node_id( $tool_node_id );
 			if ( ! empty( $tool_data ) ) {
-				$args = array(
-					'title'     => $tool_data->title,
-					'link'      => $tool_data->path,
-					'node_id'   => $tool_node_id,
-					'thumbnail' => '',
-					'image' => '',
-					'description' => '',
-				);
+				$_tool = ddc_parse_tool( $tool_data );
 
-				if ( isset( $tool_data->node->field_logo->und[0]->filename ) ) {
-					$args['thumbnail'] = $tool_data->node->field_logo->und[0]->filename;
-				}
-
-				if ( isset( $tool_data->node->field_logo->und[0]->uri ) ) {
-					$args['image'] = $tool_data->node->field_logo->und[0]->uri;
-				}
-
-				if ( isset( $tool_data->body->und[0]->value ) ) {
-					$args['description'] = $tool_data->body->und[0]->value;
-				}
-
-				$tool_id = ddc_create_tool( $args );
+				$tool_id = ddc_create_tool( $_tool );
 
 				$tool = get_post( $tool_id );
 			}

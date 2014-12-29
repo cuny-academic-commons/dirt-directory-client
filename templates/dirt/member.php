@@ -19,6 +19,8 @@
 			'title' => $member_tool->post_title,
 			'node_id' => $member_tool->dirt_node_id,
 			'description' => $member_tool->post_content,
+			'thumbnail' => $member_tool->dirt_thumbnail,
+			'image' => $member_tool->dirt_image,
 		) ) ?></li>
 	<?php endforeach; ?>
 	</ul>

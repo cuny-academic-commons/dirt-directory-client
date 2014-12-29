@@ -14,6 +14,8 @@
 			'title' => $group_tool->post_title,
 			'node_id' => $group_tool->dirt_node_id,
 			'description' => $group_tool->post_content,
+			'thumbnail' => $group_tool->dirt_thumbnail,
+			'image' => $group_tool->dirt_image,
 		) ) ?></li>
 	<?php endforeach; ?>
 	</ul>
