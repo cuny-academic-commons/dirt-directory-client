@@ -148,13 +148,13 @@ function ddc_tool_markup( $tool_data ) {
 					_n( 'Used by %s and %s other user &mdash; <a href="%s">Show all users</a>', 'Used by %s and %s other users &mdash; <a href="%s">Show all users</a>', $used_by_list_item_count, 'dirt-directory-client' ),
 					implode( ', ', $used_by_list_items ),
 					number_format_i18n( $used_by_list_item_count ),
-					ddc_get_tool_directory_url()
+					$local_tool_url . '#users'
 				);
 			} else {
 				$text = sprintf(
 					__( 'Used by %s &mdash; <a href="%s">Show all users</a>', 'dirt-directory-client' ),
 					implode( ', ', $used_by_list_items ),
-					ddc_get_tool_directory_url()
+					$local_tool_url . '#users'
 				);
 			}
 
