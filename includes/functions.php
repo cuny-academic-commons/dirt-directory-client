@@ -32,9 +32,7 @@ function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 			$tool_data = $c->get_item_by_node_id( $tool_node_id );
 			if ( ! empty( $tool_data ) ) {
 				$_tool = ddc_parse_tool( $tool_data );
-
 				$tool_id = ddc_create_tool( $_tool );
-
 				$tool = get_post( $tool_id );
 			}
 		}
@@ -89,4 +87,11 @@ function ddc_parse_tool( $tool ) {
 	}
 
 	return $_tool;
+}
+
+/**
+ * Get the slug used to build group/user tabs.
+ */
+function ddc_get_slug() {
+	return 'dirt';
 }

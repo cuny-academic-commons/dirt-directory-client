@@ -16,29 +16,10 @@ window.wp = window.wp || {};
 
 		$tools = $( '.dirt-tools' );
 
-		init_tool_users_toggle();
 		init_tool_description_toggle();
 
 		init_tool_checkboxes();
 	} );
-
-	/**
-	 * Initialize "users of this tool" toggles
-	 */
-	function init_tool_users_toggle() {
-		$tools.find( '.dirt-tool-users-toggle-link-hide' ).hide();
-		$tools.find( '.dirt-tool-users' ).hide();
-
-		$tool_users_toggles = $( '.dirt-tool-users-toggle a' );
-
-		$tool_users_toggles.on( 'click', function() {
-			$clicked = $( this );
-			$clicked.closest( '.dirt-tools > li' ).find( '.dirt-tool-users' ).toggle();
-			$clicked.siblings( '.dirt-tool-users-toggle-link' ).show();
-			$clicked.hide();
-			return false;
-		} );
-	}
 
 	/**
 	 * Initialize "descritpion" toggles

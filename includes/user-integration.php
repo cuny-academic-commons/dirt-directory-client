@@ -178,6 +178,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	$args = array_merge( array(
 		'group_id' => false,
 		'include_self' => true,
+		'count' => false,
 	), $args );
 
 	$terms = get_the_terms( $tool_id, 'ddc_tool_is_used_by_user' );
@@ -209,15 +210,13 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	}
 
 	$users = bp_core_get_users( array(
-		'type'            => 'alphabetical',
+		'type'            => 'random',
 		'include'         => $user_ids,
 		'populate_extras' => false,
-		'per_page'        => false,
-		'page'            => false,
-		'count_total'     => false,
+		'per_page'        => $args['count'],
 	) );
 
-	return $users['users'];
+	return $users;
 }
 
 /**

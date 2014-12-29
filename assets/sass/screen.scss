@@ -68,25 +68,11 @@ ul.dirt-tools {
 		text-align: right;
 	}
 
-	ul.dirt-tool-users {
-		list-style-type: none;
-
-		& > li {
-			margin: 15px 40px;
-			width: 400px;
-			float: left;
-
-			.dirt-tool-user-avatar {
-				width: 70px;
-				float: left;
-			}
-
-			.dirt-tool-user-link {
-				padding-top: 11px;
-			}
-		}
+	.dirt-tool-users {
+		font-size: .8rem;
 	}
 }
+
 
 .dirt-tool-action {
 	a {

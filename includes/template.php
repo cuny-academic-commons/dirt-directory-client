@@ -54,15 +54,10 @@ function ddc_tool_markup( $tool_data ) {
 		$tool_id = $tool->ID;
 	}
 
-	$used_by_users = array();
-	if ( ! empty( $tool ) ) {
-		$args = array();
-		if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
-			$args['group_id'] = bp_get_current_group_id();
-		}
-
-		$used_by_users = ddc_get_users_of_tool( $tool->ID, $args );
-	}
+	$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
+		'count' => 3,
+	) );
+	$used_by_users = $used_by_query['users'];
 
 	// Action button
 	$url_base = bp_get_requested_url();
@@ -118,41 +113,56 @@ function ddc_tool_markup( $tool_data ) {
 		$used_by_list_items = array();
 		foreach ( $used_by_users as $used_by_user ) {
 			$used_by_list_items[] = sprintf(
-				'<li>
-					<div class="dirt-tool-user-avatar">%s</div>
-					<div class="dirt-tool-user-link"><a href="%s">%s</a></div>
-				</li>',
-				bp_core_fetch_avatar( array(
-					'object' => 'user',
-					'item_id' => $used_by_user->ID,
-					'type' => 'thumb',
-				) ),
-				bp_core_get_user_domain( $used_by_user->ID ),
+				'<span class="dirt-tool-user dirt-tool-user-%d">
+					<a href="%s">%s</a>
+				</span>',
+				$used_by_user->ID,
+				bp_core_get_user_domain( $used_by_user->ID ) . ddc_get_slug() . '/',
 				bp_core_get_user_displayname( $used_by_user->ID )
 			);
 		}
 
 		if ( ! empty( $used_by_list_items ) ) {
-			$used_by_list_item_count = count( $used_by_list_items );
+			$used_by_list_item_count = $used_by_query['total'] - 3;
+			if ( $used_by_list_item_count < 0 ) {
+				$used_by_list_item_count = 0;
+			}
 
-			if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
-				$show_text = sprintf( _n( 'Show Group User', 'Show Group Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
-				$hide_text = sprintf( _n( 'Hide Group User', 'Hide Group Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+			if ( $used_by_list_item_count ) {
+				$text = sprintf(
+					_n( 'Used by %s and %s other user &mdash; <a href="%s">Show all users</a>', 'Used by %s and %s other users &mdash; <a href="%s">Show all users</a>', $used_by_list_item_count, 'dirt-directory-client' ),
+					implode( ', ', $used_by_list_items ),
+					number_format_i18n( $used_by_list_item_count ),
+					ddc_get_tool_directory_url()
+				);
 			} else {
-				$show_text = sprintf( _n( 'Show User', 'Show All Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
-				$hide_text = sprintf( _n( 'Hide User', 'Hide All Users (%s)', $used_by_list_item_count, 'dirt-directory-client' ), number_format_i18n( $used_by_list_item_count ) );
+				$text = sprintf(
+					__( 'Used by %s &mdash; <a href="%s">Show all users</a>', 'dirt-directory-client' ),
+					implode( ', ', $used_by_list_items ),
+					ddc_get_tool_directory_url()
+				);
 			}
 
 			$html .= sprintf(
-				'<div class="dirt-tool-users-toggle"><a class="dirt-tool-users-toggle-link dirt-tools-users-toggle-link-show" href="#">%s</a><a class="dirt-tool-users-toggle-link dirt-tool-users-toggle-link-hide" href="#">%s</a></div><ul class="dirt-tool-users">%s</ul>',
-				$show_text,
-				$hide_text,
-				implode( "\n", $used_by_list_items )
+				'<div class="dirt-tool-users" id="dirt-tool-%d-users">%s</div>',
+				$tool_id,
+				$text
 			);
 		}
 	}
 
 	return $html;
+}
+
+/**
+ * Get a link to the tools directory.
+ *
+ * @since 1.0
+ *
+ * @return string
+ */
+function ddc_get_tool_directory_url() {
+	return home_url( 'tool' );
 }
 
 function ddc_categories() {
