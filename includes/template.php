@@ -27,11 +27,23 @@ function ddc_tool_markup( $tool_data ) {
 		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $tool_data['image'] );
 	}
 
+	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
+
+	$tool_id = false;
+	if ( $tool ) {
+		$tool_id = $tool->ID;
+	}
+
+	$local_tool_url = '';
+	if ( $tool ) {
+		$local_tool_url = get_permalink( $tool );
+	}
+
 	$img_tag = '';
 	if ( $image_url ) {
 		$img_tag = sprintf(
 			'<a href="%s"><img src="%s" /></a>',
-			esc_attr( $tool_data['link'] ),
+			$local_tool_url ? esc_attr( $local_tool_url ) : esc_attr( $tool_data['link'] ),
 			esc_attr( $image_url )
 		);
 	}
@@ -42,17 +54,20 @@ function ddc_tool_markup( $tool_data ) {
 	);
 
 	// Tool name
+	if ( $local_tool_url ) {
+		$tool_title = sprintf(
+			'<a href="%s">%s</a>',
+			esc_attr( $local_tool_url ),
+			esc_html( $tool_data['title'] )
+		);
+	} else {
+		$tool_title = esc_html( $tool_data['title'] );
+	}
+
 	$html .= sprintf(
 		'<div class="dirt-tool-name">%s</div>',
-		esc_html( $tool_data['title'] )
+		$tool_title
 	);
-
-	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
-
-	$tool_id = false;
-	if ( $tool ) {
-		$tool_id = $tool->ID;
-	}
 
 	$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
 		'count' => 3,
