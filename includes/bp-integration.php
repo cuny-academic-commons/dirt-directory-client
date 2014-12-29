@@ -40,11 +40,18 @@ add_action( 'bp_loaded', 'ddc_load_bp_integration', 20 );
  * user IDs.
  *
  * @since 1.0
+ *
+ * @todo Flush rewrite rules on activation.
  */
 function ddc_load_schema() {
 	register_post_type( 'ddc_tool', array(
 		'label'  => __( 'DiRT Tools', 'dirt-directory-client' ),
-		'public' => false,
+		'public' => true,
+		'has_archive' => true,
+		'rewrite' => array(
+			'slug' => _x( 'tool', 'Tool rewrite slug', 'dirt-directory-client' ),
+			'with_front' => false,
+		),
 	) );
 
 	register_taxonomy( 'ddc_tool_is_used_by_user', 'ddc_tool', array(
