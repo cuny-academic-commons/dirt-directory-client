@@ -180,7 +180,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 		'include_self' => true,
 	), $args );
 
-	$terms = wp_get_object_terms( $tool_id, 'ddc_tool_is_used_by_user' );
+	$terms = get_the_terms( $tool_id, 'ddc_tool_is_used_by_user' );
 
 	$user_ids = array( 0 );
 	foreach ( $terms as $term ) {
