@@ -209,8 +209,12 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	}
 
 	$users = bp_core_get_users( array(
-		'type'    => 'alphabetical',
-		'include' => $user_ids,
+		'type'            => 'alphabetical',
+		'include'         => $user_ids,
+		'populate_extras' => false,
+		'per_page'        => false,
+		'page'            => false,
+		'count_total'     => false,
 	) );
 
 	return $users['users'];
