@@ -202,49 +202,7 @@ function ddc_query_tools( $args ) {
 	// Normalize. This is awful.
 	$parsed_tools = array();
 	foreach ( $tools as $tool ) {
-		$_tool = array(
-			'node_id' => '',
-			'title' => '',
-			'link' => '',
-			'snippet' => '',
-			'thumbnail' => '',
-			'image' => '',
-			'description' => '',
-		);
-
-		if ( isset( $tool->node->nid ) ) {
-			$_tool['node_id'] = $tool->node->nid;
-		} else if ( isset( $tool->nid ) ) {
-			$_tool['node_id'] = $tool->nid;
-		}
-
-		$_tool['title'] = $tool->title;
-
-		if ( isset( $tool->link ) ) {
-			$_tool['link'] = $tool->link;
-		} else if ( $_tool['node_id'] ) {
-			$_tool['link'] = 'http://dirtdirectory.org/node/' . $_tool['node_id'];
-		}
-
-		if ( isset( $tool->snippet ) ) {
-			$_tool['snippet'] = $tool->snippet;
-		}
-
-		if ( isset( $tool->node->field_logo->und[0]->filename ) ) {
-			$_tool['thumbnail'] = $tool->node->field_logo->und[0]->filename;
-		}
-
-		if ( isset( $tool->node->field_logo->und[0]->uri ) ) {
-			$_tool['image'] = $tool->node->field_logo->und[0]->uri;
-		}
-
-		if ( isset( $tool->body->und[0]->value ) ) {
-			$_tool['description'] = $tool->body->und[0]->value;
-		} else if ( isset( $tool->node->body->und[0]->value ) ) {
-			$_tool['description'] = $tool->node->body->und[0]->value;
-		}
-
-		$parsed_tools[] = $_tool;
+		$parsed_tools[] = ddc_parse_tool( $tool );
 	}
 
 	return $parsed_tools;

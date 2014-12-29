@@ -61,3 +61,51 @@ function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 
 	return $tool;
 }
+
+function ddc_parse_tool( $tool ) {
+	$_tool = array(
+		'node_id' => '',
+		'title' => '',
+		'link' => '',
+		'snippet' => '',
+		'thumbnail' => '',
+		'image' => '',
+		'description' => '',
+	);
+
+	if ( isset( $tool->node ) ) {
+		$node = $tool->node;
+	} else {
+		$node = $tool;
+	}
+
+	if ( isset( $node->nid ) ) {
+		$_tool['node_id'] = $node->nid;
+	}
+
+	$_tool['title'] = $tool->title;
+
+	if ( isset( $tool->link ) ) {
+		$_tool['link'] = $tool->link;
+	} else if ( $_tool['node_id'] ) {
+		$_tool['link'] = 'http://dirtdirectory.org/node/' . $_tool['node_id'];
+	}
+
+	if ( isset( $tool->snippet ) ) {
+		$_tool['snippet'] = $tool->snippet;
+	}
+
+	if ( isset( $node->field_logo->und[0]->filename ) ) {
+		$_tool['thumbnail'] = $node->field_logo->und[0]->filename;
+	}
+
+	if ( isset( $node->field_logo->und[0]->uri ) ) {
+		$_tool['image'] = $node->field_logo->und[0]->uri;
+	}
+
+	if ( isset( $node->body->und[0]->value ) ) {
+		$_tool['description'] = $node->body->und[0]->value;
+	}
+
+	return $_tool;
+}
