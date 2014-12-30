@@ -2,6 +2,8 @@
 
 <p><?php _e( 'The DiRT Directory is a registry of digital research tools for scholarly use.', 'dirt-directory-client' ) ?></p>
 
+<p><?php printf( __( 'Explore more tools from DiRT on the <a href="%s">Digital Tools Directory</a>.', 'dirt-directory-client' ), ddc_get_tool_directory_url() ) ?></p>
+
 <?php /* Tools in use by the group */ ?>
 <?php $group_tools = ddc_get_tools_used_by_group(); ?>
 <?php if ( ! empty( $group_tools ) ) : ?>
@@ -20,7 +22,3 @@
 	<?php endforeach; ?>
 	</ul>
 <?php endif; ?>
-
-<?php bp_get_template_part( 'dirt/explore' ); ?>
-
-
