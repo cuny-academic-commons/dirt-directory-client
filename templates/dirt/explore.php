@@ -3,8 +3,6 @@
 
 <?php $url = remove_query_arg( array( 'dirt-category', 'dirt-search' ), bp_get_requested_url() ) ?>
 <form method="get" action="<?php echo $url ?>#explore">
-	<?php $search_terms = isset( $_GET['dirt-search'] ) ? urldecode( $_GET['dirt-search'] ) : ''; ?>
-	<?php $cat_id = isset( $_GET['dirt-category'] ) ? intval( $_GET['dirt-category'] ) : ''; ?>
 	<p><?php _e( 'Find tools from the DiRT Directory:', 'dirt-directory-client' ) ?></p>
 
 	<p>
