@@ -2,7 +2,7 @@
 <h3><?php _e( 'Explore', 'dirt-directory-client' ) ?></h3>
 
 <?php $url = remove_query_arg( array( 'dirt-category', 'dirt-search' ), bp_get_requested_url() ) ?>
-<form method="get" action="<?php echo $url ?>#explore">
+<form method="get" action="<?php echo $url ?>#dirt-results">
 	<p><?php _e( 'Find tools from the DiRT Directory:', 'dirt-directory-client' ) ?></p>
 
 	<p>

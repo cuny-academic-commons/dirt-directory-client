@@ -31,6 +31,7 @@ $used_tools = ddc_get_tools( array(
 <p><?php printf( __( 'The following tools are in use by members on %s.', 'dirt-directory-client' ), esc_html( get_option( 'blogname' ) ) ) ?>
 
 <?php if ( ! empty( $used_tools ) ) : ?>
+	<a name="local-results"> </a>
 	<ul class="dirt-tools">
 	<?php foreach ( $used_tools as $used_tool ) : ?>
 		<li><?php echo ddc_tool_markup( array(
@@ -48,6 +49,7 @@ $used_tools = ddc_get_tools( array(
 <?php endif ?>
 
 <?php if ( $search_terms || $cat_id ) : ?>
+	<a name="dirt-results"> </a>
 	<h3><?php _e( 'On the DiRT Directory', 'dirt-directory-client' ) ?></h3>
 	<?php
 	if ( $search_terms ) {
