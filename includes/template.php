@@ -214,3 +214,32 @@ function ddc_categories() {
 
 	return $cats;
 }
+
+/**
+ * Is this the Tool directory?
+ *
+ * @since 1.0
+ *
+ * @return bool
+ */
+function ddc_is_tool_directory() {
+	return is_post_type_archive( 'ddc_tool' );
+}
+
+/**
+ * Is this a single Tool page?
+ *
+ * @since 1.0
+ *
+ * @return bool
+ */
+function ddc_is_tool_page() {
+	$is_tool_page = false;
+
+	if ( is_single() ) {
+		$o = get_queried_object();
+		$is_tool_page = ( $o instanceof WP_Post ) && 'ddc_tool' === $o->post_type;
+	}
+
+	return $is_tool_page;
+}
