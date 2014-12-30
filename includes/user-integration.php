@@ -183,7 +183,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 	$terms = get_the_terms( $tool_id, 'ddc_tool_is_used_by_user' );
 
-	$user_ids = array( 0 );
+	$user_ids = array();
 	foreach ( $terms as $term ) {
 		$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
 
@@ -207,6 +207,10 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 		}
 
 		$user_ids[] = $user_id;
+	}
+
+	if ( empty( $user_ids ) ) {
+		$user_ids = array( 0 );
 	}
 
 	$users = bp_core_get_users( array(
