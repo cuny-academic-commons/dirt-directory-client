@@ -128,9 +128,7 @@ function ddc_tool_markup( $tool_data ) {
 		$used_by_list_items = array();
 		foreach ( $used_by_users as $used_by_user ) {
 			$used_by_list_items[] = sprintf(
-				'<span class="dirt-tool-user dirt-tool-user-%d">
-					<a href="%s">%s</a>
-				</span>',
+				'<span class="dirt-tool-user dirt-tool-user-%d"><a href="%s">%s</a></span>',
 				$used_by_user->ID,
 				bp_core_get_user_domain( $used_by_user->ID ) . ddc_get_slug() . '/',
 				bp_core_get_user_displayname( $used_by_user->ID )
