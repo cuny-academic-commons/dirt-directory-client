@@ -119,10 +119,12 @@ class DiRT_Directory_Client_Tests_Users extends WP_UnitTestCase {
 		ddc_associate_tool_with_user( $t2, $u3 );
 
 		$users_of_t1 = ddc_get_users_of_tool( $t1 );
-		$this->assertEqualSets( array( $u1, $u2 ), wp_list_pluck( $users_of_t1, 'ID' ) );
+		$us_t1 = $users_of_t1['users'];
+		$this->assertEqualSets( array( $u1, $u2 ), wp_list_pluck( $us_t1, 'ID' ) );
 
 		$users_of_t2 = ddc_get_users_of_tool( $t2 );
-		$this->assertEqualSets( array( $u2, $u3 ), wp_list_pluck( $users_of_t2, 'ID' ) );
+		$us_t2 = $users_of_t2['users'];
+		$this->assertEqualSets( array( $u2, $u3 ), wp_list_pluck( $us_t2, 'ID' ) );
 	}
 
 	/**

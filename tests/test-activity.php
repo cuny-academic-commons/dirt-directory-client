@@ -26,7 +26,7 @@ class DiRT_Directory_Client_Tests_Activity extends BP_UnitTestCase {
 		$this->assertSame( 1, count( $found['activities'] ) );
 
 		$a = $found['activities'][0];
-		$expected = sprintf( '%s uses the digital research tool Foo', bp_core_get_userlink( $u ) );
+		$expected = sprintf( '<a href="%s">%s</a> uses the digital research tool Foo', bp_core_get_user_domain( $u ) . 'dirt/', bp_core_get_user_displayname( $u ) );
 		$this->assertSame( $expected, $a->action );
 		$this->assertSame( 'dirt', $a->component );
 		$this->assertSame( 'tool_marked_used', $a->type );
