@@ -26,6 +26,5 @@
 	</ul>
 <?php endif; ?>
 
-<?php bp_get_template_part( 'dirt/explore' ); ?>
 
 
