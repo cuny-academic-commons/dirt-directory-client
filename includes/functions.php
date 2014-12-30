@@ -50,6 +50,7 @@ function ddc_get_tools( $args = array() ) {
 		'orderby'        => 'name',
 		'posts_per_page' => -1,
 		'user_id'        => false,
+		'search_terms'   => '',
 	), $args );
 
 	$query_args = array(
@@ -81,6 +82,11 @@ function ddc_get_tools( $args = array() ) {
 			'terms' => ddc_get_user_term( $r['user_id'] ),
 			'field' => 'slug',
 		);
+	}
+
+	// search_terms
+	if ( ! empty( $r['search_terms'] ) ) {
+		$query_args['s'] = $r['search_terms'];
 	}
 
 	$tools_query = new WP_Query( $query_args );
