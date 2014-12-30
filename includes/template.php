@@ -20,19 +20,14 @@
 function ddc_tool_markup( $tool_data ) {
 	$html = '';
 
-	// Tool image
-	if ( ! empty( $tool_data['thumbnail'] ) && 'dirt_logo_default.png' !== $tool_data['thumbnail'] ) {
-		$image_url = DDC_IMAGE_BASE . 'styles/thumbnail/public/logos/' . $tool_data['thumbnail'];
-	} else {
-		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $tool_data['image'] );
-	}
-
 	$tool = ddc_get_tool( 'node_id', $tool_data['node_id'] );
 
 	$tool_id = false;
 	if ( $tool ) {
 		$tool_id = $tool->ID;
 	}
+
+	$image_url = ddc_get_tool_avatar_url( $tool_id );
 
 	$local_tool_url = '';
 	if ( $tool ) {
@@ -198,6 +193,28 @@ function ddc_tool_markup( $tool_data ) {
 
 	return $html;
 }
+
+/**
+ * Get a tool's image URL, if it has one.
+ *
+ * @return string
+ */
+function ddc_get_tool_avatar_url( $tool_id ) {
+	$image_url = '';
+
+	$thumbnail = get_post_meta( $tool_id, 'dirt_thumbnail', true );
+	if ( $thumbnail && 'dirt_logo_default.png' !== $thumbnail ) {
+		$image_url = DDC_IMAGE_BASE . 'styles/thumbnail/public/logos/' . $thumbnail;
+	}
+
+	if ( ! $image_url ) {
+		$image = get_post_meta( $tool, 'dirt_image', true );
+		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $image );
+	}
+
+	return $image_url;
+}
+
 
 /**
  * Get a link to the tools directory.
