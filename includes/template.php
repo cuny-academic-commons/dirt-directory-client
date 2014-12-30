@@ -69,8 +69,23 @@ function ddc_tool_markup( $tool_data ) {
 		$tool_title
 	);
 
+	$used_by_group_members = array();
+	if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
+		$used_by_group_members_query = ddc_get_users_of_tool( $tool->ID, array(
+			'count' => false,
+			'group_id' => bp_get_current_group_id(),
+		) );
+		$used_by_group_members = $used_by_group_members_query['users'];
+	}
+
+	$exclude = false;
+	if ( ! empty( $used_by_group_members ) ) {
+		$exclude = wp_list_pluck( $used_by_group_members, 'ID' );
+	}
+
 	$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
 		'count' => 3,
+		'exclude' => $exclude,
 	) );
 	$used_by_users = $used_by_query['users'];
 
@@ -125,9 +140,15 @@ function ddc_tool_markup( $tool_data ) {
 		);
 	}
 
-	if ( ! empty( $used_by_users ) ) {
-		$used_by_list_items = array();
-		foreach ( $used_by_users as $used_by_user ) {
+	$users_to_list = array();
+	if ( ! empty( $used_by_group_members ) ) {
+		$users_to_list = $used_by_group_members;
+	} else {
+		$users_to_list = $used_by_users;
+	}
+
+	if ( ! empty( $users_to_list ) ) {
+		foreach ( $users_to_list as $used_by_user ) {
 			$used_by_list_items[] = sprintf(
 				'<span class="dirt-tool-user dirt-tool-user-%d"><a href="%s">%s</a></span>',
 				$used_by_user->ID,
@@ -136,7 +157,15 @@ function ddc_tool_markup( $tool_data ) {
 			);
 		}
 
-		if ( ! empty( $used_by_list_items ) ) {
+		if ( ! empty( $used_by_group_members ) ) {
+			$used_by_count = count( $used_by_group_members );
+			$text = sprintf(
+				_n( 'Used by group member %s &mdash; <a href="%s">Show all users</a>', 'Used by group members %s &mdash; <a href="%s">Show all users</a>', $used_by_count, 'dirt-directory-client' ),
+				implode( ', ', $used_by_list_items ),
+				number_format_i18n( $used_by_count ),
+				$local_tool_url . '#users'
+			);
+		} else if ( ! empty( $used_by_list_items ) ) {
 			$used_by_list_item_count = $used_by_query['total'] - 3;
 			if ( $used_by_list_item_count < 0 ) {
 				$used_by_list_item_count = 0;
@@ -156,7 +185,9 @@ function ddc_tool_markup( $tool_data ) {
 					$local_tool_url . '#users'
 				);
 			}
+		}
 
+		if ( ! empty( $text ) ) {
 			$html .= sprintf(
 				'<div class="dirt-tool-users" id="dirt-tool-%d-users">%s</div>',
 				$tool_id,
