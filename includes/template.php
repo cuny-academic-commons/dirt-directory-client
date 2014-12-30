@@ -77,7 +77,8 @@ function ddc_tool_markup( $tool_data ) {
 	// Action button
 	$url_base = bp_get_requested_url();
 	if ( is_user_logged_in() ) {
-		if ( in_array( bp_loggedin_user_id(), wp_list_pluck( $used_by_users, 'ID' ) ) ) {
+		$my_tools = ddc_get_tools_of_user( get_current_user_id() );
+		if ( in_array( $tool->ID, wp_list_pluck( $my_tools, 'ID' ) ) ) {
 			$url_base = add_query_arg( 'remove_dirt_tool', $tool_data['node_id'] );
 			$button = sprintf(
 				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
