@@ -27,7 +27,11 @@ function ddc_tool_markup( $tool_data ) {
 		$tool_id = $tool->ID;
 	}
 
-	$image_url = ddc_get_tool_avatar_url( $tool_id );
+	if ( $tool_data['thumbnail'] && 'dirt_logo_default.png' !== $tool_data['thumbnail'] ) {
+		$image_url = DDC_IMAGE_BASE . 'styles/thumbnail/public/logos/' . $tool_data['thumbnail'];
+	} else {
+		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $tool_data['image'] );
+	}
 
 	$local_tool_url = '';
 	if ( $tool ) {
