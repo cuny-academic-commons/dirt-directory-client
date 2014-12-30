@@ -151,6 +151,39 @@ class DiRT_Directory_Client_Tests_Users extends BP_UnitTestCase {
 	}
 
 	/**
+	 * @group ddc_get_users_of_tool
+	 */
+	public function test_ddc_get_users_of_tool_with_group_id() {
+		$g = $this->factory->group->create();
+
+		// In group, uses tool
+		$u1 = $this->factory->user->create();
+
+		// In group, doesn't use tool
+		$u2 = $this->factory->user->create();
+
+		// Not in group, uses tool
+		$u3 = $this->factory->user->create();
+
+		// Not in group, doesn't use tool
+		$u4 = $this->factory->user->create();
+
+		$this->add_user_to_group( $u1, $g );
+		$this->add_user_to_group( $u2, $g );
+
+		$t1 = $this->create_tool();
+
+		ddc_associate_tool_with_user( $t1, $u1 );
+		ddc_associate_tool_with_user( $t1, $u3 );
+
+		$users_of_t1 = ddc_get_users_of_tool( $t1, array(
+			'group_id' => array( $g ),
+		) );
+		$us_t1 = $users_of_t1['users'];
+		$this->assertEqualSets( array( $u1 ), wp_list_pluck( $us_t1, 'ID' ) );
+	}
+
+	/**
 	 * @group ddc_get_tools_of_user
 	 */
 	public function test_ddc_get_tools_of_user() {
