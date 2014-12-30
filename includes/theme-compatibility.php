@@ -17,24 +17,18 @@
  * @since 1.0
  */
 function ddc_template_include( $template ) {
-	$o = get_queried_object();
-	if ( is_post_type_archive( 'ddc_tool' ) ||
-	     is_single() && ( $o instanceof WP_Post ) && 'ddc_tool' === $o->post_type ) {
+	if ( ddc_is_tool_directory() || ddc_is_tool_page() ) {
 		bp_set_theme_compat_active( true );
 		do_action( 'bp_setup_theme_compat' );
 	}
-
 
 	return $template;
 }
 add_filter( 'template_include', 'ddc_template_include', 0 );
 
 function ddc_template_include_2( $template ) {
-
-	if ( is_post_type_archive( 'ddc_tool' ) ) {
+	if ( ddc_is_tool_directory() ) {
 		return bp_template_include_theme_compat();
-//		bp_core_load_template( '
-//		var_Dump( $template ); die();
 	}
 
 	return $template;
@@ -47,16 +41,13 @@ class DDC_Theme_Compat {
 	}
 
 	public function set_up_theme_compat() {
-		if ( is_post_type_archive( 'ddc_tool' ) ) {
+		if ( ddc_is_tool_directory() ) {
 			add_filter( 'bp_template_include_reset_dummy_post_data', array( $this, 'directory_dummy_post' ) );
 			add_filter( 'bp_replace_the_content', array( $this, 'directory_content' ) );
 		}
 
-		if ( is_single() ) {
-			$o = get_queried_object();
-			if ( $o instanceof WP_Post && 'ddc_tool' === $o->post_type ) {
-				add_filter( 'bp_replace_the_content', array( $this, 'single_content' ) );
-			}
+		if ( ddc_is_tool_page() ) {
+			add_filter( 'bp_replace_the_content', array( $this, 'single_content' ) );
 		}
 	}
 
