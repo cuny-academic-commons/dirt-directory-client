@@ -179,13 +179,23 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 		'group_id' => false,
 		'include_self' => true,
 		'count' => false,
+		'exclude' => false,
 	), $args );
 
 	$terms = get_the_terms( $tool_id, 'ddc_tool_is_used_by_user' );
 
+	$exclude = array();
+	if ( ! empty( $args['exclude'] ) ) {
+		$exclude = wp_parse_id_list( $args['exclude'] );
+	}
+
 	$user_ids = array();
 	foreach ( $terms as $term ) {
 		$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
+
+		if ( in_array( $user_id, $exclude ) ) {
+			continue;
+		}
 
 		// If limiting to a group, check that the user is a member first.
 		if ( ! empty( $args['group_id'] ) && bp_is_active( 'groups' ) ) {
