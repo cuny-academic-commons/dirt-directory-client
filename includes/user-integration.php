@@ -228,32 +228,8 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
  * @return array
  */
 function ddc_get_tools_of_user( $user_id, $args = array() ) {
-	$r = array_merge( array(
-		'posts_per_page' => -1,
-	), $args );
-
-	$tools_query = new WP_Query( array(
-		'post_type' => 'ddc_tool',
-		'post_status' => 'publish',
-		'tax_query' => array(
-			array(
-				'taxonomy' => 'ddc_tool_is_used_by_user',
-				'terms' => ddc_get_user_term( $user_id ),
-				'field' => 'slug',
-			),
-		),
-		'posts_per_page' => intval( $r['posts_per_page'] ),
-	) );
-
-	// Add DiRT-specific info to post objects
-	foreach ( $tools_query->posts as &$post ) {
-		$post->dirt_node_id   = get_post_meta( $post->ID, 'dirt_node_id', true );
-		$post->dirt_link      = get_post_meta( $post->ID, 'dirt_link', true );
-		$post->dirt_thumbnail = get_post_meta( $post->ID, 'dirt_thumbnail', true );
-		$post->dirt_image     = get_post_meta( $post->ID, 'dirt_image', true );
-	}
-
-	return $tools_query->posts;
+	$args['user_id'] = $user_id;
+	return ddc_get_tools( $args );
 }
 
 /**

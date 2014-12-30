@@ -41,6 +41,61 @@ function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 	return $tool;
 }
 
+/**
+ * Get tools.
+ */
+function ddc_get_tools( $args = array() ) {
+	$r = array_merge( array(
+		'order'          => 'ASC',
+		'orderby'        => 'name',
+		'posts_per_page' => -1,
+		'user_id'        => false,
+	), $args );
+
+	$query_args = array(
+		'post_type'   => 'ddc_tool',
+		'post_status' => 'publish',
+		'tax_query'   => array(),
+		'orderby'     => 'name',
+		'order'       => 'ASC',
+	);
+
+	// posts_per_page
+	// @todo Sanitize?
+	$query_args['posts_per_page'] = $r['posts_per_page'];
+
+	// orderby
+	if ( in_array( $r['orderby'], array( 'name', 'date' ) ) ) {
+		$query_args['orderby'] = $r['orderby'];
+	}
+
+	// order
+	if ( 'DESC' === strtoupper( $r['order'] ) ) {
+		$query_args['order'] = 'DESC';
+	}
+
+	// @todo support for multiple users
+	if ( false !== $r['user_id'] ) {
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'ddc_tool_is_used_by_user',
+			'terms' => ddc_get_user_term( $r['user_id'] ),
+			'field' => 'slug',
+		);
+	}
+
+	$tools_query = new WP_Query( $query_args );
+
+	// Add DiRT-specific info to post objects
+	foreach ( $tools_query->posts as &$post ) {
+		$post->dirt_node_id   = get_post_meta( $post->ID, 'dirt_node_id', true );
+		$post->dirt_link      = get_post_meta( $post->ID, 'dirt_link', true );
+		$post->dirt_thumbnail = get_post_meta( $post->ID, 'dirt_thumbnail', true );
+		$post->dirt_image     = get_post_meta( $post->ID, 'dirt_image', true );
+	}
+
+	return $tools_query->posts;
+}
+
 function ddc_parse_tool( $tool ) {
 	$_tool = array(
 		'node_id' => '',
