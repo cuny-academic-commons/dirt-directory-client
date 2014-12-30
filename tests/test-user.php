@@ -3,7 +3,7 @@
 /**
  * @group user
  */
-class DiRT_Directory_Client_Tests_Users extends WP_UnitTestCase {
+class DiRT_Directory_Client_Tests_Users extends BP_UnitTestCase {
 	protected $user_id;
 
 	public function setUp() {
