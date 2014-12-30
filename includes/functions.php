@@ -160,6 +160,8 @@ function ddc_parse_tool( $tool ) {
 
 	if ( isset( $node->body->und[0]->value ) ) {
 		$_tool['description'] = $node->body->und[0]->value;
+	} else if ( isset( $node->body->en[0]->value ) ) {
+		$_tool['description'] = $node->body->en[0]->value;
 	}
 
 	return $_tool;
