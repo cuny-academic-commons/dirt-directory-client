@@ -15,6 +15,21 @@ function ddc_register_assets() {
 add_action( 'init', 'ddc_register_assets', 0 );
 
 /**
+ * Enqueue assets on CPT pages.
+ *
+ * BP pages are handled by BP integration pieces.
+ *
+ * @since 1.0
+ */
+function ddc_enqueue_assets() {
+	if ( ddc_is_tool_directory() || ddc_is_tool_page() ) {
+		wp_enqueue_style( 'dirt-directory-client' );
+		wp_enqueue_script( 'dirt-directory-client' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'ddc_enqueue_assets' );
+
+/**
  * Get a local tool object by either the local ID or the remote NID.
  */
 function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
