@@ -66,11 +66,11 @@ class DDC_Theme_Compat {
 	}
 
 	public function directory_content() {
-		bp_buffer_template_part( 'dirt/directory' );
+		return bp_buffer_template_part( 'dirt/directory', null, false );
 	}
 
 	public function single_content() {
-		bp_buffer_template_part( 'dirt/single' );
+		return bp_buffer_template_part( 'dirt/single', null, false );
 	}
 }
 new DDC_Theme_Compat ();
