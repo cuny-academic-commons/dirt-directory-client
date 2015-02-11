@@ -30,11 +30,16 @@ function ddc_format_activity_action_tool_marked_used( $action, $activity ) {
 	);
 
 	$tool = get_post( $activity->item_id );
+	$tool_link = sprintf(
+		'<a href="%s">%s</a>',
+		get_permalink( $tool ),
+		esc_html( $tool->post_title )
+	);
 
 	$action = sprintf(
 		__( '%1$s uses the digital research tool %2$s' ),
 		$user_link,
-		$tool->post_title
+		$tool_link
 	);
 
 	return $action;
