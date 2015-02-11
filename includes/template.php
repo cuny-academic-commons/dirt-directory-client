@@ -161,7 +161,6 @@ function ddc_tool_markup( $tool_data ) {
 			$text = sprintf(
 				_n( 'Used by group member %s &mdash; <a href="%s">Show all users</a>', 'Used by group members %s &mdash; <a href="%s">Show all users</a>', $used_by_count, 'dirt-directory-client' ),
 				implode( ', ', $used_by_list_items ),
-				number_format_i18n( $used_by_count ),
 				$local_tool_url . '#users'
 			);
 		} else if ( ! empty( $used_by_list_items ) ) {
