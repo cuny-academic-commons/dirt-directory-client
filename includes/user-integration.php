@@ -85,7 +85,7 @@ function ddc_get_user_id_from_usedby_term_slug( $slug ) {
  * @since 1.0
  *
  * @param array $args {
- *
+ *     @type array $categories Optional. Array of category names.
  * }
  * @return int
  */
@@ -97,6 +97,7 @@ function ddc_create_tool( $args = array() ) {
 		'thumbnail' => '',
 		'image' => '',
 		'description' => '',
+		'categories' => array(),
 	), $args );
 
 	// No checking for dupes
@@ -114,6 +115,8 @@ function ddc_create_tool( $args = array() ) {
 		update_post_meta( $tool_id, 'dirt_node_id', $r['node_id'] );
 		update_post_meta( $tool_id, 'dirt_thumbnail', $r['thumbnail'] );
 		update_post_meta( $tool_id, 'dirt_image', $r['image'] );
+
+		wp_set_object_terms( $tool_id, $r['categories'], 'ddc_tool_category' );
 	}
 
 	return $tool_id;

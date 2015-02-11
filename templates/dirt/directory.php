@@ -18,13 +18,31 @@ if ( isset( $_GET['orderby'] ) && 'newest' === $_GET['orderby'] ) {
 	$tool_order   = 'ASC';
 }
 
-// @todo categories
-$used_tools = ddc_get_tools( array(
+$cat_name = '';
+if ( $cat_id ) {
+	$cats = ddc_categories();
+	$cat_name = '';
+	foreach ( $cats as $cat ) {
+		if ( $cat['tid'] == $cat_id ) {
+			$cat_name = $cat['name'];
+			break;
+		}
+	}
+}
+
+$used_tool_args = array(
 	'search_terms'   => $search_terms,
 	'orderby'        => $tool_orderby,
 	'order'          => $tool_order,
 	'posts_per_page' => -1,
-) );
+);
+
+if ( $cat_name ) {
+	$used_tool_args['categories'] = $cat_name;
+}
+
+// @todo categories
+$used_tools = ddc_get_tools( $used_tool_args );
 
 ?>
 
@@ -64,15 +82,6 @@ $used_tools = ddc_get_tools( array(
 			'cat_id' => $cat_id,
 			'type' => 'category',
 		);
-
-		$cats = ddc_categories();
-		$cat_name = '';
-		foreach ( $cats as $cat ) {
-			if ( $cat['tid'] == $cat_id ) {
-				$cat_name = $cat['name'];
-				break;
-			}
-		}
 
 		$results_string = sprintf( __( 'We found these tools in the category: %s', 'dirt-directory-client' ), '<span class="dirt-search-terms">' . esc_html( $cat_name ) . '</span>' );
 	}

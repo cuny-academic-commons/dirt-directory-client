@@ -66,6 +66,7 @@ function ddc_get_tools( $args = array() ) {
 		'posts_per_page' => -1,
 		'user_id'        => false,
 		'search_terms'   => '',
+		'categories'     => array(), // By 'name'.
 	), $args );
 
 	$query_args = array(
@@ -99,6 +100,23 @@ function ddc_get_tools( $args = array() ) {
 		);
 	}
 
+	if ( ! empty( $r['categories'] ) ) {
+		// Can't pass 'name' properly to tax query. Fixed in WP 4.2 - #WP27810.
+		$cat_ids = array();
+		foreach ( (array) $r['categories'] as $cat_name ) {
+			$_cat = get_term_by( 'name', $cat_name, 'ddc_tool_category' );
+			if ( $_cat ) {
+				$cat_ids[] = $_cat->term_id;
+			}
+		}
+
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'ddc_tool_category',
+			'terms' => $cat_ids,
+			'field' => 'id',
+		);
+	}
+
 	// search_terms
 	if ( ! empty( $r['search_terms'] ) ) {
 		$query_args['s'] = $r['search_terms'];
@@ -126,6 +144,7 @@ function ddc_parse_tool( $tool ) {
 		'thumbnail' => '',
 		'image' => '',
 		'description' => '',
+		'categories' => array(),
 	);
 
 	if ( isset( $tool->node ) ) {
@@ -162,6 +181,21 @@ function ddc_parse_tool( $tool ) {
 		$_tool['description'] = $node->body->und[0]->value;
 	} else if ( isset( $node->body->en[0]->value ) ) {
 		$_tool['description'] = $node->body->en[0]->value;
+	}
+
+	if ( isset( $node->field_categories->und ) ) {
+		$ddc_cats = ddc_categories();
+		foreach ( $node->field_categories->und as $cat ) {
+			if ( isset( $cat->tid ) ) {
+				// Whee!
+				foreach ( $ddc_cats as $ddc_cat ) {
+					if ( $cat->tid == $ddc_cat['tid'] ) {
+						$_tool['categories'][] = $ddc_cat['name'];
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	return $_tool;

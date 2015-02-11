@@ -59,6 +59,11 @@ function ddc_load_schema() {
 		'label'  => __( 'DiRT Tool Users', 'dirt-directory-client' ),
 		'public' => false,
 	) );
+
+	register_taxonomy( 'ddc_tool_category', 'ddc_tool', array(
+		'label'  => __( 'DiRT Tool Category', 'dirt-directory-client' ),
+		'public' => true,
+	) );
 }
 add_action( 'init', 'ddc_load_schema' );
 
