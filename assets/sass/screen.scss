@@ -81,6 +81,9 @@ ul.dirt-tools,
 }
 
 .dirt-tool-action {
+	min-height: 3em;
+	margin-bottom: .5em;
+
 	a {
 		text-decoration: none;
 	}
@@ -109,8 +112,10 @@ ul.dirt-tools,
 		font-size: .8em;
 	}
 
-	&:hover .dirt-tool-action-question {
-		display: block;
+	&:hover {
+		.dirt-tool-action-question {
+			display: block;
+		}
 	}
 }
 

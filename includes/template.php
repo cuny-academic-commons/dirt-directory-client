@@ -89,32 +89,8 @@ function ddc_tool_markup( $tool_data ) {
 	$used_by_users = $used_by_query['users'];
 
 	// Action button
-	$url_base = bp_get_requested_url();
 	if ( is_user_logged_in() ) {
-		$my_tools = ddc_get_tools_of_user( get_current_user_id() );
-		if ( in_array( $tool->ID, wp_list_pluck( $my_tools, 'ID' ) ) ) {
-			$url_base = add_query_arg( 'remove_dirt_tool', $tool_data['node_id'] );
-			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
-				$tool_id,
-				wp_nonce_url( $url_base, 'ddc_remove_tool' ),
-				__( 'Click to remove this tool from your list', 'dirt-directory-client' ),
-				wp_create_nonce( 'ddc_toggle_tool_' . $tool_data['node_id'] ),
-				$tool_data['node_id']
-			);
-		} else {
-			$url_base = add_query_arg( 'add_dirt_tool', $tool_data['node_id'] );
-			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-add"><label for="dirt-tool-add-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input type="checkbox" value="%d" name="dirt-tool-add[%1$d]" id="dirt-tool-add-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%3$s</span></div>',
-				$tool_id,
-				wp_nonce_url( $url_base, 'ddc_add_tool' ),
-				__( 'Click to show that you use this tool', 'dirt-directory-client' ),
-				wp_create_nonce( 'ddc_toggle_tool_' . $tool_data['node_id'] ),
-				$tool_data['node_id']
-			);
-		}
-
-		$html .= $button;
+		$html .= ddc_get_action_checkbox( $tool->ID );
 	}
 
 	// Tool description
@@ -211,13 +187,50 @@ function ddc_get_tool_avatar_url( $tool_id ) {
 	}
 
 	if ( ! $image_url ) {
-		$image = get_post_meta( $tool, 'dirt_image', true );
+		$image = get_post_meta( $tool_id, 'dirt_image', true );
 		$image_url = str_replace( 'public://', DDC_IMAGE_BASE, $image );
 	}
 
 	return $image_url;
 }
 
+/**
+ * Get the action checkbox markup for a tool (I use this).
+ *
+ * @since 1.0
+ *
+ * @return string
+ */
+function ddc_get_action_checkbox( $tool_id ) {
+	$url_base = bp_get_requested_url();
+	if ( is_user_logged_in() ) {
+		$my_tools = ddc_get_tools_of_user( get_current_user_id() );
+		$tool_node_id = get_post_meta( $tool_id, 'dirt_node_id', true );
+		if ( in_array( $tool_id, wp_list_pluck( $my_tools, 'ID' ) ) ) {
+			$url_base = add_query_arg( 'remove_dirt_tool', $tool_node_id );
+			$button = sprintf(
+				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
+				$tool_id,
+				wp_nonce_url( $url_base, 'ddc_remove_tool' ),
+				__( 'Click to remove this tool from your list', 'dirt-directory-client' ),
+				wp_create_nonce( 'ddc_toggle_tool_' . $tool_node_id ),
+				$tool_node_id
+			);
+		} else {
+			$url_base = add_query_arg( 'add_dirt_tool', $tool_node_id );
+			$button = sprintf(
+				'<div class="dirt-tool-action dirt-tool-action-add"><label for="dirt-tool-add-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input type="checkbox" value="%d" name="dirt-tool-add[%1$d]" id="dirt-tool-add-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%3$s</span></div>',
+				$tool_id,
+				wp_nonce_url( $url_base, 'ddc_add_tool' ),
+				__( 'Click to show that you use this tool', 'dirt-directory-client' ),
+				wp_create_nonce( 'ddc_toggle_tool_' . $tool_node_id ),
+				$tool_node_id
+			);
+		}
+	}
+
+	return $button;
+}
 
 /**
  * Get a link to the tools directory.
