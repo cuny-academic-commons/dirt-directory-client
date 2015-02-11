@@ -14,7 +14,7 @@ define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 if ( ! defined( 'DDC_ENDPOINT_BASE' ) ) {
-	define( 'DDC_ENDPOINT_BASE', 'http://dev.bamboodirt.gotpantheon.com/' );
+	define( 'DDC_ENDPOINT_BASE', 'http://dirtdirectory.org/' );
 }
 
 if ( ! defined( 'DDC_ENDPOINT_URL' ) ) {
