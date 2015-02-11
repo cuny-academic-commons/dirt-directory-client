@@ -82,15 +82,18 @@ function ddc_tool_markup( $tool_data ) {
 		$exclude = wp_list_pluck( $used_by_group_members, 'ID' );
 	}
 
-	$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
-		'count' => 3,
-		'exclude' => $exclude,
-	) );
-	$used_by_users = $used_by_query['users'];
+	$used_by_users = array();
+	if ( $tool ) {
+		$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
+			'count' => 3,
+			'exclude' => $exclude,
+		) );
+		$used_by_users = $used_by_query['users'];
+	}
 
 	// Action button
 	if ( is_user_logged_in() ) {
-		$html .= ddc_get_action_checkbox( $tool->ID );
+		$html .= ddc_get_action_checkbox( $tool_id, $tool_data['node_id'] );
 	}
 
 	// Tool description
@@ -201,11 +204,15 @@ function ddc_get_tool_avatar_url( $tool_id ) {
  *
  * @return string
  */
-function ddc_get_action_checkbox( $tool_id ) {
+function ddc_get_action_checkbox( $tool_id, $tool_node_id = '' ) {
 	$url_base = bp_get_requested_url();
 	if ( is_user_logged_in() ) {
 		$my_tools = ddc_get_tools_of_user( get_current_user_id() );
-		$tool_node_id = get_post_meta( $tool_id, 'dirt_node_id', true );
+
+		if ( ! $tool_node_id ) {
+			$tool_node_id = get_post_meta( $tool_id, 'dirt_node_id', true );
+		}
+
 		if ( in_array( $tool_id, wp_list_pluck( $my_tools, 'ID' ) ) ) {
 			$url_base = add_query_arg( 'remove_dirt_tool', $tool_node_id );
 			$button = sprintf(
