@@ -152,6 +152,15 @@ class DiRT_Directory_Client {
 	}
 
 	/**
+	 * Get a list of the items (nodes/tools) that match a given TaDiRAH term.
+	 *
+	 * @param int $category_id
+	 */
+	public function get_items_for_tadirah_term( $category_id ) {
+		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[field_tadirah_goals_methods]', intval( $category_id ) )->request();
+	}
+
+	/**
 	 * Get a list of tools that match a search term.
 	 *
 	 * @param string $search_term
@@ -195,7 +204,7 @@ function ddc_query_tools( $args ) {
 				return $tools;
 			}
 
-			$tools = $c->get_items_for_category( $args['cat_id'] );
+			$tools = $c->get_items_for_tadirah_term( $args['cat_id'] );
 			break;
 	}
 

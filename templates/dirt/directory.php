@@ -41,7 +41,6 @@ if ( $cat_name ) {
 	$used_tool_args['categories'] = $cat_name;
 }
 
-// @todo categories
 $used_tools = ddc_get_tools( $used_tool_args );
 
 ?>

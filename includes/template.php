@@ -261,14 +261,10 @@ function ddc_categories() {
 		$taxonomies = $c->get_taxonomies();
 		$cat_vid = 0;
 		foreach ( $taxonomies as $tax ) {
-			if ( 'categories' === $tax->machine_name ) {
+			if ( 'tadirah' === $tax->machine_name ) {
 				$cat_vid = $tax->vid;
 				break;
 			}
-		}
-
-		if ( ! $cat_vid ) {
-		//	update_option( 'ddc_categories', $cats );
 		}
 
 		$categories = $c->get_taxonomy_terms( $cat_vid );
