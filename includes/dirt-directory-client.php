@@ -201,8 +201,10 @@ function ddc_query_tools( $args ) {
 
 	// Normalize. This is awful.
 	$parsed_tools = array();
-	foreach ( $tools as $tool ) {
-		$parsed_tools[] = ddc_parse_tool( $tool );
+	if ( ! empty( $tools ) ) {
+		foreach ( $tools as $tool ) {
+			$parsed_tools[] = ddc_parse_tool( $tool );
+		}
 	}
 
 	return $parsed_tools;
