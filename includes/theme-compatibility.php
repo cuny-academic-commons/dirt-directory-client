@@ -17,6 +17,16 @@
  * @since 1.0
  */
 function ddc_template_include( $template ) {
+	// Non theme-compat support.
+	if ( ! bp_use_theme_compat_with_current_theme() ) {
+		if ( ddc_is_tool_directory() || ddc_is_tool_page() ) {
+			$template = locate_template( 'dirt/non-theme-compat-index.php' );
+		}
+
+		remove_filter( 'template_include', 'ddc_template_include_2', 999 );
+		return $template;
+	}
+
 	if ( ddc_is_tool_directory() || ddc_is_tool_page() ) {
 		bp_set_theme_compat_active( true );
 		do_action( 'bp_setup_theme_compat' );
@@ -27,6 +37,10 @@ function ddc_template_include( $template ) {
 add_filter( 'template_include', 'ddc_template_include', 0 );
 
 function ddc_template_include_2( $template ) {
+	if ( ! bp_use_theme_compat_with_current_theme() ) {
+		return $template;
+	}
+
 	if ( ddc_is_tool_directory() ) {
 		return bp_template_include_theme_compat();
 	}
