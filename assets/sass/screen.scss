@@ -28,6 +28,10 @@
 	padding-left: 50px;
 }
 
+.dirt-tool-avatar {
+	margin: 2em 0;
+}
+
 ol.dirt-tools,
 ul.dirt-tools,
 .entry-content ul.dirt-tools {
@@ -76,6 +80,7 @@ ul.dirt-tools,
 }
 
 .dirt-tool-all-users {
+	margin-top: 2em;
 	ul.dirt-tool-all-users-list {
 		list-style-type: none;
 	}
