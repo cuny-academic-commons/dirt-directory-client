@@ -10,6 +10,7 @@ Text Domain: dirt-directory-client
 Domain Path: /languages
 */
 
+define( 'DDC_VERSION', '1.0' );
 define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -27,9 +28,12 @@ if ( ! defined( 'DDC_IMAGE_BASE' ) ) {
 
 require DDC_PLUGIN_DIR . 'includes/functions.php';
 
+if ( is_admin() ) {
+	require DDC_PLUGIN_DIR . 'includes/admin.php';
+}
+
 function ddc_include() {
 	require DDC_PLUGIN_DIR . 'includes/dirt-directory-client.php';
 	require DDC_PLUGIN_DIR . 'includes/bp-integration.php';
 }
 add_action( 'bp_include', 'ddc_include' );
-
