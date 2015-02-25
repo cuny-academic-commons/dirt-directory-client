@@ -183,9 +183,9 @@ function ddc_parse_tool( $tool ) {
 		$_tool['description'] = $node->body->en[0]->value;
 	}
 
-	if ( isset( $node->field_categories->und ) ) {
+	if ( isset( $node->field_tadirah_goals_methods->und ) ) {
 		$ddc_cats = ddc_categories();
-		foreach ( $node->field_categories->und as $cat ) {
+		foreach ( $node->field_tadirah_goals_methods->und as $cat ) {
 			if ( isset( $cat->tid ) ) {
 				// Whee!
 				foreach ( $ddc_cats as $ddc_cat ) {
