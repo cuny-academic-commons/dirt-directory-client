@@ -41,4 +41,8 @@
 		<?php endforeach; ?>
 		</ul>
 	</div>
+
+	<hr /><br />
+	<p><?php printf( __( 'Explore more tools from DiRT on the <a href="%s">Digital Tools Directory</a>.', 'dirt-directory-client' ), ddc_get_tool_directory_url() ) ?></p>
+
 </div>
