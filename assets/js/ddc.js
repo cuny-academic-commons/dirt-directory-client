@@ -4,6 +4,7 @@ window.wp = window.wp || {};
 	var checked,
 		tool_id,
 		$clicked,
+		$current_action,
 		$current_checkbox,
 		$current_tool,
 		$tools,
@@ -47,13 +48,22 @@ window.wp = window.wp || {};
 			$current_tool.find( 'input[type="checkbox"], label' ).on( 'click', function( e ) {
 				e.preventDefault();
 
+				$current_action = $(this).closest( '.dirt-tool-action' );
+
+				// Don't allow multiple clicks when AJAX is in effect.
+				if ( $current_action.hasClass( 'spinner' ) ) {
+					return false;
+				}
+
+				$current_action.addClass( 'spinner' );
+
 				// Gah. Clicking on the input means that 'checked' gets disabled
 				// BEFORE we can check it, so we must flip
 				if ( this.tagName === 'INPUT' ) {
 					$current_checkbox = $(this);
 					checked = ! $current_checkbox.is( ':checked' );
 				} else {
-					$current_checkbox = $(this).closest( '.dirt-tool-action' ).find( 'input[type="checkbox"]' );
+					$current_checkbox = $current_action.find( 'input[type="checkbox"]' );
 					checked = $current_checkbox.is( ':checked' );
 				}
 
@@ -79,6 +89,8 @@ window.wp = window.wp || {};
 								$current_checkbox.closest( '.dirt-tool-action' ).find( '.dirt-tool-action-question' ).html( DDC.add_gloss );
 							}
 						}
+
+						$current_action.removeClass( 'spinner' );
 					}
 				} );
 			} );

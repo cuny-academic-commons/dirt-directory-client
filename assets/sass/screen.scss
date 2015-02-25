@@ -14,6 +14,10 @@
 	}
 }
 
+.dirt-tool-action-label {
+	padding: 5px 0;
+}
+
 .explore-type-label {
 	margin-left: 20px;
 	width: 100px;
@@ -123,6 +127,12 @@ ul.dirt-tools,
 			display: block;
 		}
 	}
+}
+
+.spinner label {
+	background: url(../images/wpspin_light.gif) no-repeat left center;
+	padding-left: 20px;
+	opacity: .5;
 }
 
 /* Genericons */
@@ -307,8 +317,3 @@ ul.dirt-tools,
 .genericon-rightarrow:before {      content: '\f501'; }
 .genericon-downarrow:before {       content: '\f502'; }
 .genericon-leftarrow:before {       content: '\f503'; }
-
-
-
-
-
