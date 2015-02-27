@@ -34,7 +34,7 @@
 				<?php printf(
 					'%s <a href="%s">%s</a>',
 					bp_core_fetch_avatar( array( 'item_id' => $tool_user->ID, 'width' => 25, 'height' => 25, ) ),
-					bp_core_get_user_domain( $tool_user->ID ),
+					trailingslashit( bp_core_get_user_domain( $tool_user->ID ) ) . trailingslashit( ddc_get_slug() ),
 					bp_core_get_user_displayname( $tool_user->ID )
 				); ?>
 			</li>
