@@ -2,7 +2,7 @@
 Contributors: boonebgorges, cuny-academic-commons
 Tags: dirt, digital, tools, buddypress
 Requires at least: 4.0
-Tested up to: 4.1
+Tested up to: 4.1.1
 Stable tag: 1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -16,6 +16,8 @@ The DiRT Directory http://dirtdirectory.org is a directory of digital research t
 When activated, group administrators have the option of enabling a Digital Research Tools tab for the group. Group members can then search the DiRT Directory, adding tools to their profile by clicking the 'I use this' button next to an individual tool. Tools that are used by site members have profiles on your WordPress site, where local users are listed.
 
 User-facing features of this plugin require BuddyPress. The plugin contains a standalone client for the DiRT API, which developers can use as a basis for building more general WordPress integration tools.
+
+The plugin is designed for themes that use BuddyPress's theme compatibility system. If your theme does not use theme compatibility (usually this means it's a derivative of bp-default), you'll need to do some manual modification to your theme. Create a directory in your theme called 'dirt', and copy the plugin file `dirt-directory-client/templates/dirt/non-theme-compat-index.php` to the new directory.
 
 Development of this tool was sponsored by a grant from the Andrew W. Mellon Foundation.
 
