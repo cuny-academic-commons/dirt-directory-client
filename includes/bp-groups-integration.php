@@ -3,20 +3,20 @@
 /**
  * Integration into the BuddyPress Groups component.
  *
- * @since 0.1
+ * @since 1.0.0
  */
 
 /**
  * Implementation of BP_Group_Extension.
  *
- * @since 0.1
+ * @since 1.0.0
  */
 class DDC_Group_Extension extends BP_Group_Extension {
 
 	/**
 	 * Current group ID.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @var int
 	 */
 	protected $current_group_id;
@@ -24,7 +24,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Current group object.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @var BP_Groups_Group
 	 */
 	protected $current_group;
@@ -32,7 +32,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Group settings.
          *
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @var array
 	 */
 	protected $current_group_settings = array();
@@ -40,7 +40,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		parent::init( array(
@@ -58,7 +58,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Determine access setting for the main plugin tab.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -83,9 +83,9 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Main tab display.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
-	 * @param int $group_id
+	 * @param int $group_id ID of the current group.
 	 */
 	public function display( $group_id = null ) {
 		wp_enqueue_style( 'dirt-directory-client' );
@@ -97,9 +97,9 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Settings screen markup.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
-	 * @param int $group_id
+	 * @param int $group_id ID of the current group.
 	 */
 	public function settings_screen( $group_id = null ) {
 		$settings = $this->get_current_group_settings();
@@ -120,9 +120,9 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Settings screen save callback.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
-	 * @param int $group_id
+	 * @param int $group_id ID of the current group.
 	 */
 	public function settings_screen_save( $group_id = null ) {
 		$old_settings = $new_settings = $this->get_current_group_settings();
@@ -144,9 +144,9 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Get the current group ID.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
-	 * @return int
+	 * @return int ID of the current group.
 	 */
 	protected function get_current_group_id() {
 		if ( is_null( $this->current_group_id ) ) {
@@ -159,9 +159,9 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Get the current group.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
-	 * @return BP_Groups_Group
+	 * @return BP_Groups_Group Group object.
 	 */
 	protected function get_current_group() {
 		if ( is_null( $this->current_group ) ) {
@@ -176,7 +176,7 @@ class DDC_Group_Extension extends BP_Group_Extension {
 	/**
 	 * Get settings for the current group.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */

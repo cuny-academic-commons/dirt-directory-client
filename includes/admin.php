@@ -3,13 +3,13 @@
 /**
  * Admin-only functionality.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 
 /**
  * Run necessary upgrade routines.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_upgrade() {
 	if ( ! current_user_can( 'manage_options' ) ) {

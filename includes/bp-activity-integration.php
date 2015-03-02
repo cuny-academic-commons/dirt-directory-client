@@ -1,9 +1,14 @@
 <?php
+/**
+ * Integration with the BuddyPress Activity component.
+ *
+ * @since 1.0.0
+ */
 
 /**
  * Register activity actions.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_register_activity_actions() {
 	bp_activity_set_action(
@@ -20,7 +25,11 @@ add_action( 'bp_register_activity_actions', 'ddc_register_activity_actions' );
 /**
  * Activity action format callback.
  *
- * @since 1.0
+ * @since 1.0.0
+ *
+ * @param string $action   Action string.
+ * @param object $activity Activity object.
+ * @return string Formatted activity string.
  */
 function ddc_format_activity_action_tool_marked_used( $action, $activity ) {
 	$user_link = sprintf(
@@ -46,9 +55,12 @@ function ddc_format_activity_action_tool_marked_used( $action, $activity ) {
 }
 
 /**
- * Functionality related to the BP Activity component.
+ * Generate a "uses the tool" activity item on tool association.
  *
- * @since 1.0
+ * @since 1.0.0
+ *
+ * @param int $tool_id Local ID of the tool.
+ * @param int $user_id ID of the user.
  */
 function ddc_create_tool_marked_used_activity( $tool_id, $user_id ) {
 	bp_activity_add( array(
@@ -63,10 +75,10 @@ add_action( 'ddc_associated_tool_with_user', 'ddc_create_tool_marked_used_activi
 /**
  * Delete tool_marked_used activity item when dissociating.
  *
- * @since 1.0
+ * @since 1.0.0
  *
- * @param int $tool_id
- * @param int $user_id
+ * @param int $tool_id Local ID of the tool.
+ * @param int $user_id ID of the user.
  */
 function ddc_delete_tool_marked_used_activity( $tool_id, $user_id ) {
 	$activity = bp_activity_get( array(

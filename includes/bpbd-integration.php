@@ -2,10 +2,17 @@
 
 /**
  * Integration with BP Better Directories.
+ *
+ * Requires BP Better Directories 1.0 or greater.
+ *
+ * @since 1.0.0
  */
 
 /**
  * Add DiRT fields to the filter form.
+ *
+ * @param array $fields Array of fields available for filtering.
+ * @return array
  */
 function ddc_bpbd_filterable_fields( $fields ) {
 	$fields['dirt-tools'] = array(
@@ -20,9 +27,13 @@ function ddc_bpbd_filterable_fields( $fields ) {
 add_action( 'bpbd_filterable_fields', 'ddc_bpbd_filterable_fields' );
 
 /**
- * Filter user queries as necessary.
+ * Modify user queries as necessary.
  *
  * We'll convert to an 'include' array.
+ *
+ * @since 1.0.0
+ *
+ * @param BP_User_Query User query object.
  */
 function ddc_bpbd_filter_user_query( BP_User_Query $bp_user_query ) {
 	if ( empty( $_GET['bpbd-filter-dirt-tools'] ) ) {
@@ -55,6 +66,12 @@ add_action( 'bp_pre_user_query_construct', 'ddc_bpbd_filter_user_query' );
 
 /**
  * Provide our own render logic for BPBD filter.
+ *
+ * @since 1.0.0
+ *
+ * @param bool   $retval False to allow BPBD native HTML to be generated.
+ * @param array  $field  Data about the field being rendered.
+ * @param object $bpbd   Unused.
  */
 function ddc_bpbd_render_field( $retval, $field, $bpbd ) {
 	if ( 'dirt-tools' !== $field['id'] ) {

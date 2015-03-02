@@ -3,13 +3,14 @@
 /**
  * API client class.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 class DiRT_Directory_Client {
 	/**
 	 * Base URI for the API
 	 *
 	 * @var string
+	 * @since 1.0.0
 	 */
 	public $api_base = DDC_ENDPOINT_URL;
 
@@ -17,6 +18,7 @@ class DiRT_Directory_Client {
 	 * Endpoint URL chunk.
 	 *
 	 * @var string
+	 * @since 1.0.0
 	 */
 	protected $endpoint;
 
@@ -24,6 +26,7 @@ class DiRT_Directory_Client {
 	 * Query vars.
 	 *
 	 * @var array
+	 * @since 1.0.0
 	 */
 	protected $query_vars = array();
 
@@ -31,6 +34,7 @@ class DiRT_Directory_Client {
 	 * Status code.
 	 *
 	 * @var int
+	 * @since 1.0.0
 	 */
 	protected $status_code;
 
@@ -38,13 +42,14 @@ class DiRT_Directory_Client {
 	 * Parsed API response.
 	 *
 	 * @var mixed
+	 * @since 1.0.0
 	 */
 	protected $parsed_response;
 
 	/**
 	 * Constructor
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		$this->query_vars = array(
@@ -57,7 +62,10 @@ class DiRT_Directory_Client {
 	/**
 	 * Set the endpoint (chunk of URL after the API base
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint Endpoint URI.
+	 * @return DiRT_Directory_Client
 	 */
 	public function set_endpoint( $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -67,8 +75,9 @@ class DiRT_Directory_Client {
 	/**
 	 * Add a query var.
 	 *
-	 * @param key
-	 * @param value
+	 * @param string $key   Key for the query var.
+	 * @param mixed  $value Value for the query var.
+	 * @return DiRT_Directory_Client
 	 */
 	public function add_query_var( $key, $value ) {
 		// Will overwrite existing
@@ -79,7 +88,7 @@ class DiRT_Directory_Client {
 	/**
 	 * Build the request URI out of the params.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -92,7 +101,7 @@ class DiRT_Directory_Client {
 	/**
 	 * Perform an API request.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed
 	 */
@@ -110,6 +119,10 @@ class DiRT_Directory_Client {
 
 	/**
 	 * Get a list of taxonomies.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return mixed
 	 */
 	public function get_taxonomies() {
 		return $this->set_endpoint( 'taxonomy_vocabulary.json' )->request();
@@ -117,6 +130,11 @@ class DiRT_Directory_Client {
 
 	/**
 	 * Get a list of terms for a given taxonomy.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $taxonomy_id ID of the taxonomy.
+	 * @return mixed
 	 */
 	public function get_taxonomy_terms( $taxonomy_id ) {
 		return $this->set_endpoint( 'entity_taxonomy_term.json' )->add_query_var( 'parameters[vid]', intval( $taxonomy_id ) )->request();
@@ -125,7 +143,10 @@ class DiRT_Directory_Client {
 	/**
 	 * Get an item by node ID.
 	 *
-	 * @param int $node_id
+	 * @since 1.0.0
+	 *
+	 * @param int $node_id ID of the node.
+	 * @return mixed
 	 */
 	public function get_item_by_node_id( $node_id ) {
 		return $this->set_endpoint( 'node/' . $node_id . '.json' )->request();
@@ -134,9 +155,12 @@ class DiRT_Directory_Client {
 	/**
 	 * Get a list of the items (nodes/tools) that match a given taxonomy term.
 	 *
-	 * @param int $taxonomy_term_id
-	 *
 	 * @todo Is broken
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $taxonomy_term_id Term ID.
+	 * @return mixed
 	 */
 	public function get_items_for_taxonomy_term( $taxonomy_term_id ) {
 		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[tid]', intval( $taxonomy_term_id ) )->request();
@@ -145,7 +169,10 @@ class DiRT_Directory_Client {
 	/**
 	 * Get a list of the items (nodes/tools) that match a given category.
 	 *
-	 * @param int $category_id
+	 * @since 1.0.0
+	 *
+	 * @param int $category_id ID of the category.
+	 * @return mixed
 	 */
 	public function get_items_for_category( $category_id ) {
 		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[field_categories]', intval( $category_id ) )->request();
@@ -154,7 +181,10 @@ class DiRT_Directory_Client {
 	/**
 	 * Get a list of the items (nodes/tools) that match a given TaDiRAH term.
 	 *
-	 * @param int $category_id
+	 * @since 1.0.0
+	 *
+	 * @param int $category_id TaDiRAH category ID.
+	 * @return mixed
 	 */
 	public function get_items_for_tadirah_term( $category_id ) {
 		return $this->set_endpoint( 'entity_node.json' )->add_query_var( 'parameters[field_tadirah_goals_methods]', intval( $category_id ) )->request();
@@ -163,7 +193,10 @@ class DiRT_Directory_Client {
 	/**
 	 * Get a list of tools that match a search term.
 	 *
-	 * @param string $search_term
+	 * @since 1.0.0
+	 *
+	 * @param string $search_term Search term.
+	 * @return mixed
 	 */
 	public function get_items_by_search_term( $search_term ) {
 		return $this->set_endpoint( 'search_node/retrieve.json' )->add_query_var( 'keys', $search_term )->request();
@@ -173,13 +206,13 @@ class DiRT_Directory_Client {
 /**
  * Procedural wrapper for making API queries.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param array $args {
- *     @type string $type Query type. 'search'.
+ *     @type string $type         Query type. 'search'.
  *     @type string $search_terms Terms to search.
  * }
- * @return array
+ * @return array Array of formatted results.
  */
 function ddc_query_tools( $args ) {
 	$tools = array();

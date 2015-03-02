@@ -26,6 +26,12 @@ Development of this tool was sponsored by a grant from the Andrew W. Mellon Foun
 1. Install the plugin through the Dashboard interface.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 
+== Frequently Asked Questions ==
+
+= How do I contribute to this plugin? =
+
+Development of the plugin is ongoing. Visit https://github.com/cuny-academic-commons/dirt-directory-client. Note that you will need a Sass compiler to contribute CSS.
+
 == Changelog ==
 
 = 1.0 =

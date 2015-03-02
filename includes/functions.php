@@ -1,7 +1,15 @@
 <?php
 
 /**
- * Register assets.
+ * Miscellanous utility functions.
+ *
+ * @since 1.0.0
+ */
+
+/**
+ * Register CSS and JS assets.
+ *
+ * @since 1.0.0
  */
 function ddc_register_assets() {
 	wp_register_style( 'dirt-directory-client', DDC_PLUGIN_URL . 'assets/css/screen.css' );
@@ -19,7 +27,7 @@ add_action( 'init', 'ddc_register_assets', 0 );
  *
  * BP pages are handled by BP integration pieces.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_enqueue_assets() {
 	if ( ddc_is_tool_directory() || ddc_is_tool_page() ) {
@@ -31,6 +39,12 @@ add_action( 'wp_enqueue_scripts', 'ddc_enqueue_assets' );
 
 /**
  * Get a local tool object by either the local ID or the remote NID.
+ *
+ * @since 1.0.0
+ *
+ * @param int $tool_id      Optional. Local tool ID. Will take precedence if provided.
+ * @param int $tool_node_id Optional. DiRT tool node ID.
+ * @return WP_Post|null WP_Post on success or null on failure.
  */
 function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 	$tool = false;
@@ -57,7 +71,20 @@ function ddc_get_tool_by_identifier( $tool_id = false, $tool_node_id = false ) {
 }
 
 /**
- * Get tools.
+ * Get local tools.
+ *
+ * @since 1.0.0
+ *
+ * @param array $args {
+ *     Array of optional parameters.
+ *     @type string $order Sort order. Accepts 'ASC' or 'DESC'. Default 'ASC'.
+ *     @type string $orderby Field to order by. Accepts 'name' or 'date'. Default 'name'.
+ *     @type int $posts_per_page Number of posts to return per page. Default -1 (no limit).
+ *     @type int|bool $user_id If present, limit results to those used by given user ID. Default false.
+ *     @type string $search_terms Filter results based on search terms.
+ *     @type string $categories Array of categories to match. Should be passed as taxonomy term 'name' properties.
+ * }
+ * @return array Array of results (WP_Post objects).
  */
 function ddc_get_tools( $args = array() ) {
 	$r = array_merge( array(
@@ -135,6 +162,17 @@ function ddc_get_tools( $args = array() ) {
 	return $tools_query->posts;
 }
 
+/**
+ * Parse raw tool data into a standard format.
+ *
+ * Depending on the particular endpoint, the API returns results that are formatted slightly differently. The current
+ * function, surely the worst one in this entire plugin, standardizes them.
+ *
+ * @since 1.0.0
+ *
+ * @param object $tool Tool data from an API request.
+ * @return array
+ */
 function ddc_parse_tool( $tool ) {
 	$_tool = array(
 		'node_id' => '',
@@ -203,6 +241,12 @@ function ddc_parse_tool( $tool ) {
 
 /**
  * Get the slug used to build group/user tabs.
+ *
+ * Put into a separate function so that it can be abstracted at some point in the future.
+ *
+ * @since 1.0.0
+ *
+ * @return string
  */
 function ddc_get_slug() {
 	return 'dirt';

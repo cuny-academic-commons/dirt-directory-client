@@ -3,13 +3,13 @@
 /**
  * Functionality that links tools to users.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 
 /**
  * Associate a tool with a user.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param int $tool_id ID of the tool.
  * @param int $user_id ID of the user.
@@ -29,7 +29,7 @@ function ddc_associate_tool_with_user( $tool_id, $user_id ) {
 /**
  * Dissociate a tool from a user.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param int $tool_id ID of the tool.
  * @param int $user_id ID of the user.
@@ -58,7 +58,7 @@ function ddc_dissociate_tool_from_user( $tool_id, $user_id ) {
 /**
  * Get the unique slug for ddc_tool_is_used_by_user terms.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param int $user_id
  * @return string
@@ -70,7 +70,7 @@ function ddc_get_user_term( $user_id ) {
 /**
  * Get the user ID from a ddc_tool_is_used_by_user term slug.
  *
- * @since 1.0
+ * @since 1.0.0
  * @param string $slug
  * @return int
  */
@@ -82,12 +82,19 @@ function ddc_get_user_id_from_usedby_term_slug( $slug ) {
 /**
  * Create a local Tool object.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param array $args {
- *     @type array $categories Optional. Array of category names.
+ *     Optional tool parameters.
+ *     @type string $title       Tool title.
+ *     @type string $link        Remote URL of tool (DiRT node URI).
+ *     @type int    $node_ID     DiRT node ID.
+ *     @type string $thumbnail   URL of tool thumbnail image.
+ *     @type string $image       URL of tool full image.
+ *     @type string $description Tool description.
+ *     @type array  $categories  Optional. Array of category names.
  * }
- * @return int
+ * @return int ID of the newly created tool.
  */
 function ddc_create_tool( $args = array() ) {
 	$r = array_merge( array(
@@ -125,7 +132,7 @@ function ddc_create_tool( $args = array() ) {
 /**
  * Fetch a Tool object.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @param string $by Field to query by. 'node_id', 'link', 'title'.
  * @param int|string $value Value to query by.
@@ -173,6 +180,8 @@ function ddc_get_tool( $by, $value ) {
 
 /**
  * Get users of a given tool.
+ *
+ * @since 1.0.0
  *
  * @param int $tool_id
  * @return bool|array $users False on failure, users on success.
@@ -241,9 +250,10 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 /**
  * Get tools of a given user.
  *
- * @since 1.0
+ * @since 1.0.0
  *
- * @param int $user_id
+ * @param int   $user_id ID of the user.
+ * @param array $args    See {@see ddc_get_tools()} for a description.
  * @return array
  */
 function ddc_get_tools_of_user( $user_id, $args = array() ) {
@@ -254,8 +264,12 @@ function ddc_get_tools_of_user( $user_id, $args = array() ) {
 /**
  * Get tools in use on the site..
  *
- * @since 1.0
+ * @since 1.0.0
  *
+ * @param array $args {
+ *     Array of optional arguments.
+ *     @type int $posts_per_page Number of results to return per page. Default: -1 (no limit).
+ * }
  * @return array
  */
 function ddc_get_tools_in_use( $args = array() ) {
@@ -285,7 +299,7 @@ function ddc_get_tools_in_use( $args = array() ) {
 /**
  * Catch add and remove requests.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_catch_add_remove_requests() {
 	if ( ! is_user_logged_in() ) {
@@ -364,13 +378,13 @@ add_action( 'bp_actions', 'ddc_catch_add_remove_requests' );
  *
  * Integrates into user profiles.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 class DiRT_Directory_Client_Component extends BP_Component {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		parent::start(
@@ -383,7 +397,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	/**
 	 * Set up global data.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
+	 *
+	 * @param array $args See {@see BP_Component::setup_globals()}.
 	 */
 	public function setup_globals( $args = array() ) {
 		parent::setup_globals( array(
@@ -395,7 +411,10 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	/**
 	 * Set up nav items.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
+	 *
+	 * @param array $main_nav See {@see BP_Component::setup_nav()}.
+	 * @param array $sub_nav  See {@see BP_Component::setup_nav()}.
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		$main_nav = array(
@@ -428,7 +447,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * Have to do it like this because post types are not registered at the
 	 * time that the nav is set up. Blargh.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -459,7 +478,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	/**
 	 * Template loader.
 	 *
-	 * @since 1.0
+	 * Also responsible for enqueing assets.
+	 *
+	 * @since 1.0.0
 	 */
 	public function template_loader() {
 		add_action( 'bp_template_content', array( $this, 'template_content_loader' ) );
@@ -471,7 +492,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	/**
 	 * Template content loader.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function template_content_loader() {
 		bp_get_template_part( 'dirt/member' );
@@ -481,7 +502,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 /**
  * Bootstrap the BP_Component.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_component_bootstrap() {
 	buddypress()->ddc = new DiRT_Directory_Client_Component();

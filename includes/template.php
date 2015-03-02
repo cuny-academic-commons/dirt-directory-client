@@ -3,17 +3,17 @@
 /**
  * Template functions.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 
 /**
  * Generate the markup for a tool.
  *
  * @param array $args {
- *     Tool data
- *     @type string $link URI of the DiRT page of the tool.
- *     @type string $title Title of the tool.
- *     @type int $node_id DiRT node ID.
+ *     Tool data.
+ *     @type string $link    URI of the DiRT page of the tool.
+ *     @type string $title   Title of the tool.
+ *     @type int    $node_id DiRT node ID.
  * }
  * @return string $html
  */
@@ -179,6 +179,7 @@ function ddc_tool_markup( $tool_data ) {
 /**
  * Get a tool's image URL, if it has one.
  *
+ * @param int $tool_id Local ID of the tool.
  * @return string
  */
 function ddc_get_tool_avatar_url( $tool_id ) {
@@ -200,8 +201,10 @@ function ddc_get_tool_avatar_url( $tool_id ) {
 /**
  * Get the action checkbox markup for a tool (I use this).
  *
- * @since 1.0
+ * @since 1.0.0
  *
+ * @param int $tool_id      Local ID of the tool.
+ * @param int $tool_node_id Optional. DiRT tool node. Used if $tool_id is not present (ie it's not yet a local tool).
  * @return string
  */
 function ddc_get_action_checkbox( $tool_id, $tool_node_id = '' ) {
@@ -242,7 +245,7 @@ function ddc_get_action_checkbox( $tool_id, $tool_node_id = '' ) {
 /**
  * Get a link to the tools directory.
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @return string
  */
@@ -250,6 +253,15 @@ function ddc_get_tool_directory_url() {
 	return home_url( 'tool' );
 }
 
+/**
+ * Get an array of TaDiRAH category data.
+ *
+ * Data includes local taxonomy term ID and taxonomy 'name'. Data is cached locally for performance.
+ *
+ * @since 1.0.0
+ *
+ * @return array
+ */
 function ddc_categories() {
 	// @todo Better cache busting.
 	$cats = get_option( 'ddc_categories' );
@@ -284,7 +296,7 @@ function ddc_categories() {
 /**
  * Is this the Tool directory?
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @return bool
  */
@@ -295,7 +307,7 @@ function ddc_is_tool_directory() {
 /**
  * Is this a single Tool page?
  *
- * @since 1.0
+ * @since 1.0.0
  *
  * @return bool
  */

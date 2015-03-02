@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Set up integration with BuddyPress
+ * Set up integration with BuddyPress.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 
 /**
  * Load BP integration files.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_load_bp_integration() {
 	require DDC_PLUGIN_DIR . 'includes/template.php';
@@ -34,15 +34,11 @@ add_action( 'bp_loaded', 'ddc_load_bp_integration', 20 );
 /**
  * Load schema for storing tool connections.
  *
- * Custom post type ddc_tool stores local data about the tools, as needed for
- * display.
+ * Custom post type 'ddc_tool' stores local data about the tools, as needed for display.
  *
- * Custom taxonomy ddc_tool_is_used_by_user is a property of tools, pointing to
- * user IDs.
+ * Custom taxonomy 'ddc_tool_is_used_by_user' is a property of tools, pointing to user IDs.
  *
- * @since 1.0
- *
- * @todo Flush rewrite rules on activation.
+ * @since 1.0.0
  */
 function ddc_load_schema() {
 	register_post_type( 'ddc_tool', array(
@@ -70,9 +66,9 @@ add_action( 'init', 'ddc_load_schema' );
 /**
  * Add local templates to the BP template stack, so that bp_get_template_part() can be used.
  *
- * @since 1.0
+ * @since 1.0.0
  *
- * @param $array Template stack.
+ * @param $array Template location stack.
  * @return $array
  */
 function ddc_add_to_template_stack( $stack ) {
@@ -84,7 +80,7 @@ add_filter( 'bp_get_template_stack', 'ddc_add_to_template_stack' );
 /**
  * AJAX callback for tool use toggle.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 function ddc_tool_use_toggle_ajax_cb() {
 	$data = array(
