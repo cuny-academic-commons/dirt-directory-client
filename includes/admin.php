@@ -26,7 +26,6 @@ function ddc_upgrade() {
 
 	if ( version_compare( $ddc_version, '1.0', '<' ) ) {
 		flush_rewrite_rules();
-		var_dump( 'ok' );
 	}
 
 	update_option( 'ddc_version', DDC_VERSION );
