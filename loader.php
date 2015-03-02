@@ -10,7 +10,7 @@ Text Domain: dirt-directory-client
 Domain Path: /languages
 */
 
-define( 'DDC_VERSION', '1.0' );
+define( 'DDC_VERSION', '1.0.0' );
 define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
