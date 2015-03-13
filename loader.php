@@ -4,10 +4,22 @@
 Plugin Name: DiRT Directory Client
 Version: 1.0.0
 Description: Interface with the DiRT Directory API http://dirt.projectbamboo.org
-Author: Boone B Gorges
+Author: Boone Gorges
 Author URI: http://boone.gorg.es
 Text Domain: dirt-directory-client
 Domain Path: /languages
+
+== Copyright ==
+Copyright 2015 Boone Gorges (email: boone@gorg.es)
+
+This program is distributed dually under the GNU General Public License,
+version 3, and the Educational Community License, version 2.0.
+See license-gpl-3.txt and license-ecl-2.txt for more information.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+License for more details.
 */
 
 define( 'DDC_VERSION', '1.0.0' );
