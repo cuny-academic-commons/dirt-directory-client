@@ -34,5 +34,8 @@ Development of the plugin is ongoing. Visit https://github.com/cuny-academic-com
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.1 =
+* More explicit license statements
+
+= 1.0.0 =
 * Initial release
