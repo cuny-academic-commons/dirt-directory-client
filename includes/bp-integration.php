@@ -12,7 +12,6 @@
  * @since 1.0.0
  */
 function ddc_load_bp_integration() {
-	require DDC_PLUGIN_DIR . 'includes/template.php';
 	require DDC_PLUGIN_DIR . 'includes/user-integration.php';
 	require DDC_PLUGIN_DIR . 'includes/theme-compatibility.php';
 
