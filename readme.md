@@ -29,7 +29,7 @@ Development of the plugin is ongoing. Visit https://github.com/cuny-academic-com
 
 = 1.0.1 =
 * Fix URL path for tool logos
-* Fix bug that prevented template files from loading properly when BuddyPress is not present
+* Fix fatal error when running with BuddyPress disabled
 
 = 1.0 =
 * Initial release
