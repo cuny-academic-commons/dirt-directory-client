@@ -24,7 +24,7 @@ if ( ! defined( 'DDC_ENDPOINT_URL' ) ) {
 }
 
 if ( ! defined( 'DDC_IMAGE_BASE' ) ) {
-	define( 'DDC_IMAGE_BASE', DDC_ENDPOINT_BASE . 'sites/default/files/' );
+	define( 'DDC_IMAGE_BASE', DDC_ENDPOINT_BASE . 'sites/dirtdirectory.org/files/' );
 }
 
 require DDC_PLUGIN_DIR . 'includes/template.php';
