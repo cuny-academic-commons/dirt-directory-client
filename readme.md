@@ -25,6 +25,10 @@ Development of this tool was sponsored by a grant from the Andrew W. Mellon Foun
 
 Development of the plugin is ongoing. Visit https://github.com/cuny-academic-commons/dirt-directory-client. Note that you will need a Sass compiler to contribute CSS.
 
+= License =
+
+This project is dual licensed under the GNU General Public License v3.0 and the Educational Community License v2.0.
+
 == Changelog ==
 
 = 1.0.1 =
