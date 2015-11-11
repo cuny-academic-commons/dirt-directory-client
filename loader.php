@@ -44,3 +44,13 @@ function ddc_include() {
 	require DDC_PLUGIN_DIR . 'includes/bp-integration.php';
 }
 add_action( 'bp_include', 'ddc_include' );
+
+/**
+ * Load plugin translations.
+ *
+ * @since 1.0.2
+ */
+function ddc_load_textdomain() {
+	load_plugin_textdomain( 'dirt-directory-client', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'plugins_loaded', 'ddc_load_textdomain' );
