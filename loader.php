@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: DiRT Directory Client
-Version: 1.0.1
+Version: 1.0.2
 Description: Interface with the DiRT Directory API http://dirt.projectbamboo.org
 Author: Boone B Gorges
 Author URI: http://boone.gorg.es

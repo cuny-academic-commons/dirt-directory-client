@@ -2,8 +2,8 @@
 Contributors: boonebgorges, cuny-academic-commons
 Tags: dirt, digital, tools, buddypress
 Requires at least: 4.0
-Tested up to: 4.2.4
-Stable tag: 1.0.1
+Tested up to: 4.3.1
+Stable tag: 1.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -33,6 +33,9 @@ Development of this tool was sponsored by a grant from the Andrew W. Mellon Foun
 Development of the plugin is ongoing. Visit https://github.com/cuny-academic-commons/dirt-directory-client. Note that you will need a Sass compiler to contribute CSS.
 
 == Changelog ==
+
+= 1.0.2 =
+* Ensure that plugin translations are loaded
 
 = 1.0.1 =
 * Fix URL path for tool logos
