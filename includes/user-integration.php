@@ -542,7 +542,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'parent' => buddypress()->my_account_menu_id,
 			'id' => 'my-account-dirt',
 			'title' => __( 'Digital Research Tools', 'dirt-directory-client' ),
-			'href' => bp_loggedin_user_domain() . 'tools/',
+			'href' => bp_loggedin_user_domain() . $this->slug . '/',
 		);
 
 		// Add a subnav just so that the styling isn't weird.
@@ -550,7 +550,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'parent' => 'my-account-dirt',
 			'id' => 'my-account-dirt-tools',
 			'title' => __( 'My Tools', 'dirt-directory-client' ),
-			'href' => bp_loggedin_user_domain() . 'tools/',
+			'href' => bp_loggedin_user_domain() . $this->slug . '/',
 		);
 
 		parent::setup_admin_bar( $wp_admin_nav );
