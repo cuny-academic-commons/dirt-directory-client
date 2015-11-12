@@ -219,7 +219,7 @@ function ddc_get_action_checkbox( $tool_id, $tool_node_id = '' ) {
 		if ( in_array( $tool_id, wp_list_pluck( $my_tools, 'ID' ) ) ) {
 			$url_base = add_query_arg( 'remove_dirt_tool', $tool_node_id );
 			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
+				'<div class="dirt-tool-action dirt-tool-action-remove"><label for="dirt-tool-remove-%1$d" class="dirt-tool-action-label"><a href="%2$s">' . __( 'I use this', 'dirt-directory-client' ) . '</a></label> <input checked="checked" type="checkbox" value="%d" name="dirt-tool-remove[%1$d]" id="dirt-tool-remove-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-remove">%3$s</span></div>',
 				$tool_id,
 				wp_nonce_url( $url_base, 'ddc_remove_tool' ),
 				__( 'Click to remove this tool from your list', 'dirt-directory-client' ),
@@ -229,7 +229,7 @@ function ddc_get_action_checkbox( $tool_id, $tool_node_id = '' ) {
 		} else {
 			$url_base = add_query_arg( 'add_dirt_tool', $tool_node_id );
 			$button = sprintf(
-				'<div class="dirt-tool-action dirt-tool-action-add"><label for="dirt-tool-add-%1$d" class="dirt-tool-action-label"><a href="%2$s">I use this</a></label> <input type="checkbox" value="%d" name="dirt-tool-add[%1$d]" id="dirt-tool-add-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%3$s</span></div>',
+				'<div class="dirt-tool-action dirt-tool-action-add"><label for="dirt-tool-add-%1$d" class="dirt-tool-action-label"><a href="%2$s">' . __( 'I use this', 'dirt-directory-client' ) . '</a></label> <input type="checkbox" value="%d" name="dirt-tool-add[%1$d]" id="dirt-tool-add-%1$d" data-tool-id="%1$d" data-tool-node-id="%5$d" data-nonce="%4$s"><span class="dirt-tool-action-question dirt-tool-action-question-add">%3$s</span></div>',
 				$tool_id,
 				wp_nonce_url( $url_base, 'ddc_add_tool' ),
 				__( 'Click to show that you use this tool', 'dirt-directory-client' ),

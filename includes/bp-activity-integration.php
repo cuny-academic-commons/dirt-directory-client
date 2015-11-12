@@ -14,9 +14,9 @@ function ddc_register_activity_actions() {
 	bp_activity_set_action(
 		'dirt',
 		'tool_marked_used',
-		__( 'Digital Research Tool Used', 'buddypress' ),
+		__( 'Digital Research Tool Used', 'dirt-directory-client' ),
 		'ddc_format_activity_action_tool_marked_used',
-		__( 'Digital Research Tools Used', 'buddypress' ),
+		__( 'Digital Research Tools Used', 'dirt-directory-client' ),
 		array( 'activity', 'member', 'member_groups' )
 	);
 }
@@ -46,7 +46,7 @@ function ddc_format_activity_action_tool_marked_used( $action, $activity ) {
 	);
 
 	$action = sprintf(
-		__( '%1$s uses the digital research tool %2$s' ),
+		__( '%1$s uses the digital research tool %2$s', 'dirt-directory-client' ),
 		$user_link,
 		$tool_link
 	);
