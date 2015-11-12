@@ -382,12 +382,12 @@ add_action( 'bp_actions', 'ddc_catch_add_remove_requests' );
  */
 class DiRT_Directory_Client_Component extends BP_Component {
 	/**
-	 * Does the user have tools?
+	 * Does the given user have tools?
 	 *
 	 * @since 1.1.0
-	 * @var bool
+	 * @var array
 	 */
-	protected $user_has_tools;
+	protected $user_has_tools = array();
 
 	/**
 	 * Constructor.
@@ -465,7 +465,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	public function change_tab_visibility() {
 		$bp_nav = buddypress()->bp_nav;
 
-		$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools();
+		$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools( bp_displayed_user_id() );
 
 		buddypress()->bp_nav = $bp_nav;
 	}
@@ -477,9 +477,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 *
 	 * @return bool
 	 */
-	protected function user_has_tools() {
-		if ( ! is_null( $this->user_has_tools ) ) {
-			return (bool) $this->user_has_tools;
+	protected function user_has_tools( $user_id ) {
+		if ( isset( $this->user_has_tools[ $user_id ] ) ) {
+			return (bool) $this->user_has_tools[ $user_id ];
 		}
 
 		$tools_query = new WP_Query( array(
@@ -488,7 +488,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'tax_query' => array(
 				array(
 					'taxonomy' => 'ddc_tool_is_used_by_user',
-					'terms' => ddc_get_user_term( bp_displayed_user_id() ),
+					'terms' => ddc_get_user_term( $user_id ),
 					'field' => 'slug',
 				),
 			),
@@ -498,9 +498,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'update_post_meta_cache' => false,
 		) );
 
-		$this->user_has_tools = $tools_query->have_posts();
+		$this->user_has_tools[ $user_id ] = $tools_query->have_posts();
 
-		return $this->user_has_tools;
+		return $this->user_has_tools[ $user_id ];
 	}
 
 	/**
@@ -534,7 +534,7 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * @param array $wp_admin_nav See BP_Component::setup_admin_bar() for a description.
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
-		if ( ! $this->user_has_tools() ) {
+		if ( ! $this->user_has_tools( bp_loggedin_user_id() ) ) {
 			return;
 		}
 
