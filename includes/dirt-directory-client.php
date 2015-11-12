@@ -245,7 +245,10 @@ function ddc_query_tools( $args ) {
 	$parsed_tools = array();
 	if ( ! empty( $tools ) ) {
 		foreach ( $tools as $tool ) {
-			$parsed_tools[] = ddc_parse_tool( $tool );
+			$parsed_tool = ddc_parse_tool( $tool );
+			if ( $parsed_tool ) {
+				$parsed_tools[] = $parsed_tool;
+			}
 		}
 	}
 

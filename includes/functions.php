@@ -171,9 +171,14 @@ function ddc_get_tools( $args = array() ) {
  * @since 1.0.0
  *
  * @param object $tool Tool data from an API request.
- * @return array
+ * @return array|bool A standardized array on success, false if the wrong kind of `$tool` is passed.
  */
 function ddc_parse_tool( $tool ) {
+	// The API returns an error string when nothing is found.
+	if ( is_string( $tool ) ) {
+		return false;
+	}
+
 	$_tool = array(
 		'node_id' => '',
 		'title' => '',
