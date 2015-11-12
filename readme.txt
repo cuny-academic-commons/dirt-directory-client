@@ -34,6 +34,9 @@ Development of the plugin is ongoing. Visit https://github.com/cuny-academic-com
 
 == Changelog ==
 
+= 1.0.3 =
+* Show proper error message when no results are found
+
 = 1.0.2 =
 * Ensure that plugin translations are loaded
 
