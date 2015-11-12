@@ -382,6 +382,14 @@ add_action( 'bp_actions', 'ddc_catch_add_remove_requests' );
  */
 class DiRT_Directory_Client_Component extends BP_Component {
 	/**
+	 * Does the user have tools?
+	 *
+	 * @since 1.1.0
+	 * @var bool
+	 */
+	protected $user_has_tools;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -390,7 +398,10 @@ class DiRT_Directory_Client_Component extends BP_Component {
 		parent::start(
 			'ddc',
 			__( 'Digital Research Tools', 'dirt-directory-client' ),
-			DDC_PLUGIN_DIR
+			DDC_PLUGIN_DIR,
+			array(
+				'adminbar_myaccount_order' => 83,
+			)
 		);
 	}
 
@@ -513,6 +524,36 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 */
 	public function template_content_loader() {
 		bp_get_template_part( 'dirt/member' );
+	}
+
+	/**
+	 * Set up the component entries in the WordPress Admin Bar.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array $wp_admin_nav See BP_Component::setup_admin_bar() for a description.
+	 */
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
+		if ( ! $this->user_has_tools() ) {
+			return;
+		}
+
+		$wp_admin_nav[] = array(
+			'parent' => buddypress()->my_account_menu_id,
+			'id' => 'my-account-dirt',
+			'title' => __( 'Digital Research Tools', 'dirt-directory-client' ),
+			'href' => bp_loggedin_user_domain() . 'tools/',
+		);
+
+		// Add a subnav just so that the styling isn't weird.
+		$wp_admin_nav[] = array(
+			'parent' => 'my-account-dirt',
+			'id' => 'my-account-dirt-tools',
+			'title' => __( 'My Tools', 'dirt-directory-client' ),
+			'href' => bp_loggedin_user_domain() . 'tools/',
+		);
+
+		parent::setup_admin_bar( $wp_admin_nav );
 	}
 }
 
