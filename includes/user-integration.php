@@ -452,6 +452,25 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * @return bool
 	 */
 	public function change_tab_visibility() {
+		$bp_nav = buddypress()->bp_nav;
+
+		$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools();
+
+		buddypress()->bp_nav = $bp_nav;
+	}
+
+	/**
+	 * Does the user have tools?
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return bool
+	 */
+	protected function user_has_tools() {
+		if ( ! is_null( $this->user_has_tools ) ) {
+			return (bool) $this->user_has_tools;
+		}
+
 		$tools_query = new WP_Query( array(
 			'post_type' => 'ddc_tool',
 			'post_status' => 'publish',
@@ -468,11 +487,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'update_post_meta_cache' => false,
 		) );
 
-		$bp_nav = buddypress()->bp_nav;
+		$this->user_has_tools = $tools_query->have_posts();
 
-		$bp_nav['dirt']['show_for_displayed_user'] = $tools_query->have_posts();
-
-		buddypress()->bp_nav = $bp_nav;
+		return $this->user_has_tools;
 	}
 
 	/**
