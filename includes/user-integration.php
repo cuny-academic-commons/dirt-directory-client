@@ -463,11 +463,17 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * @return bool
 	 */
 	public function change_tab_visibility() {
-		$bp_nav = buddypress()->bp_nav;
+		if ( class_exists( 'BP_Core_Nav' ) ) {
+			buddypress()->members->nav->edit_nav( array(
+				'show_for_displayed_user' => $this->user_has_tools( bp_displayed_user_id() ),
+			), 'dirt' );
+		} else {
+			$bp_nav = buddypress()->bp_nav;
 
-		$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools( bp_displayed_user_id() );
+			$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools( bp_displayed_user_id() );
 
-		buddypress()->bp_nav = $bp_nav;
+			buddypress()->bp_nav = $bp_nav;
+		}
 	}
 
 	/**
