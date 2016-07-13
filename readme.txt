@@ -37,9 +37,8 @@ Development of the plugin is ongoing. Visit https://github.com/cuny-academic-com
 = 1.1.0 =
 * Add menu to user dropdown in admin bar
 * Improved BP 2.6+ compatibility
-
-= 1.0.3 =
 * Show proper error message when no results are found
+* Improved localization
 
 = 1.0.2 =
 * Ensure that plugin translations are loaded
