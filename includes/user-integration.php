@@ -202,6 +202,32 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	}
 
 	$user_ids = array();
+
+	$group_ids = null;
+	if ( false !== $args['group_id'] ) {
+		$group_ids = wp_parse_id_list( $args['group_id'] );
+	}
+
+	$group_member_ids = array();
+	if ( ! empty( $group_ids ) && bp_is_active( 'groups' ) ) {
+		foreach ( $group_ids as $group_id ) {
+			$group_members = wp_cache_get( $group_id, 'ddc_bp_group_members' );
+			if ( false === $group_members ) {
+				$group_member_query = new BP_Group_Member_Query( array(
+					'group_id' => $args['group_id'],
+					'type' => 'alphabetical',
+					'group_role' => array( 'admin', 'mod', 'member' ),
+				) );
+				wp_cache_add( $group_id, $group_member_query->results, 'ddc_bp_group_members' );
+				$this_group_member_ids = wp_list_pluck( $group_member_query->results, 'ID' );
+			} else {
+				$this_group_member_ids = wp_list_pluck( $group_members, 'ID' );
+			}
+		}
+
+		$group_member_ids = array_merge( $group_member_ids, $this_group_member_ids );
+	}
+
 	if ( ! empty( $terms ) ) {
 		foreach ( $terms as $term ) {
 			$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
@@ -212,19 +238,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 			// If limiting to a group, check that the user is a member first.
 			if ( ! empty( $args['group_id'] ) && bp_is_active( 'groups' ) ) {
-				if ( ! isset( $group_members ) ) {
-					$group_member_query = new BP_Group_Member_Query( array(
-						'group_id' => $args['group_id'],
-						'group_role' => array(
-							'member',
-							'mod',
-							'admin',
-						),
-					) );
-					$group_members = wp_list_pluck( $group_member_query->results, 'ID' );
-				}
-
-				if ( ! in_array( $user_id, $group_members ) && ( ! $args['include_self'] || $user_id != bp_loggedin_user_id() ) ) {
+				if ( ! in_array( $user_id, $group_member_ids ) && ( ! $args['include_self'] || $user_id != bp_loggedin_user_id() ) ) {
 					continue;
 				}
 			}
