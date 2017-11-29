@@ -198,17 +198,6 @@ class DDC_Group_Extension extends BP_Group_Extension {
 }
 
 /**
- * Add non-persistent caching group.
- *
- * @since 1.1.1
- */
-function ddc_add_non_persistent_caching_group() {
-	wp_cache_add_non_persistent_groups( array(
-		'ddc_bp_group_members',
-	) );
-}
-
-/**
  * Get tools in use by a group.
  *
  * @param int $group_id Optional. Group ID. Default: current group ID.

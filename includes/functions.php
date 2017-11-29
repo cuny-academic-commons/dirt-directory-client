@@ -7,6 +7,18 @@
  */
 
 /**
+ * Add non-persistent caching group.
+ *
+ * @since 1.1.1
+ */
+function ddc_add_non_persistent_caching_group() {
+	wp_cache_add_non_persistent_groups( array(
+		'ddc_bp_group_members',
+		'ddc_bp_users',
+	) );
+}
+
+/**
  * Register CSS and JS assets.
  *
  * @since 1.0.0

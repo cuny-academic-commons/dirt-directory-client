@@ -251,12 +251,17 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 		$user_ids = array( 0 );
 	}
 
-	$users = bp_core_get_users( array(
-		'type'            => 'random',
-		'include'         => $user_ids,
-		'populate_extras' => false,
-		'per_page'        => $args['count'],
-	) );
+	$cache_key = md5( json_encode( $user_ids ) ) . $args['count'];
+	$users = wp_cache_get( $cache_key, 'ddc_bp_users' );
+	if ( false === $users ) {
+		$users = bp_core_get_users( array(
+			'type'            => 'random',
+			'include'         => $user_ids,
+			'populate_extras' => false,
+			'per_page'        => $args['count'],
+		) );
+		wp_cache_add( $cache_key, $users, 'ddc_bp_users' );
+	}
 
 	return $users;
 }
