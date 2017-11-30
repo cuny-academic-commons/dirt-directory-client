@@ -9,7 +9,7 @@
 /**
  * Add non-persistent caching group.
  *
- * @since 1.1.1
+ * @since 1.2.0
  */
 function ddc_add_non_persistent_caching_group() {
 	wp_cache_add_non_persistent_groups( array(
