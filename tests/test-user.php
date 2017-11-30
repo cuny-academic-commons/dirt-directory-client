@@ -119,12 +119,10 @@ class DiRT_Directory_Client_Tests_Users extends BP_UnitTestCase {
 		ddc_associate_tool_with_user( $t2, $u3 );
 
 		$users_of_t1 = ddc_get_users_of_tool( $t1 );
-		$us_t1 = $users_of_t1['users'];
-		$this->assertEqualSets( array( $u1, $u2 ), wp_list_pluck( $us_t1, 'ID' ) );
+		$this->assertEqualSets( array( $u1, $u2 ), $users_of_t1 );
 
 		$users_of_t2 = ddc_get_users_of_tool( $t2 );
-		$us_t2 = $users_of_t2['users'];
-		$this->assertEqualSets( array( $u2, $u3 ), wp_list_pluck( $us_t2, 'ID' ) );
+		$this->assertEqualSets( array( $u2, $u3 ), $users_of_t2 );
 	}
 
 	/**
@@ -146,8 +144,7 @@ class DiRT_Directory_Client_Tests_Users extends BP_UnitTestCase {
 		$users_of_t1 = ddc_get_users_of_tool( $t1, array(
 			'exclude' => array( $u2 ),
 		) );
-		$us_t1 = $users_of_t1['users'];
-		$this->assertEqualSets( array( $u1 ), wp_list_pluck( $us_t1, 'ID' ) );
+		$this->assertEqualSets( array( $u1 ), $users_of_t1 );
 	}
 
 	/**
@@ -179,8 +176,7 @@ class DiRT_Directory_Client_Tests_Users extends BP_UnitTestCase {
 		$users_of_t1 = ddc_get_users_of_tool( $t1, array(
 			'group_id' => array( $g ),
 		) );
-		$us_t1 = $users_of_t1['users'];
-		$this->assertEqualSets( array( $u1 ), wp_list_pluck( $us_t1, 'ID' ) );
+		$this->assertEqualSets( array( $u1 ), $users_of_t1 );
 	}
 
 	/**
