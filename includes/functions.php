@@ -14,7 +14,7 @@
 function ddc_add_non_persistent_caching_group() {
 	wp_cache_add_non_persistent_groups( array(
 		'ddc_bp_group_members',
-		'ddc_bp_users',
+		'ddc_tools',
 	) );
 }
 
@@ -108,70 +108,79 @@ function ddc_get_tools( $args = array() ) {
 		'categories'     => array(), // By 'name'.
 	), $args );
 
-	$query_args = array(
-		'post_type'   => 'ddc_tool',
-		'post_status' => 'publish',
-		'tax_query'   => array(),
-		'orderby'     => 'name',
-		'order'       => 'ASC',
-	);
+	$cache_key = md5( json_encode( $r ) );
+	$tools = wp_cache_get( $cache_key, 'ddc_tools' );
 
-	// posts_per_page
-	// @todo Sanitize?
-	$query_args['posts_per_page'] = $r['posts_per_page'];
-
-	// orderby
-	if ( in_array( $r['orderby'], array( 'name', 'date' ) ) ) {
-		$query_args['orderby'] = $r['orderby'];
-	}
-
-	// order
-	if ( 'DESC' === strtoupper( $r['order'] ) ) {
-		$query_args['order'] = 'DESC';
-	}
-
-	// @todo support for multiple users
-	if ( false !== $r['user_id'] ) {
-		$query_args['tax_query'][] = array(
-			'taxonomy' => 'ddc_tool_is_used_by_user',
-			'terms' => ddc_get_user_term( $r['user_id'] ),
-			'field' => 'slug',
+	if ( false === $tools ) {
+		$query_args = array(
+			'post_type'   => 'ddc_tool',
+			'post_status' => 'publish',
+			'tax_query'   => array(),
+			'orderby'     => 'name',
+			'order'       => 'ASC',
 		);
-	}
 
-	if ( ! empty( $r['categories'] ) ) {
-		// Can't pass 'name' properly to tax query. Fixed in WP 4.2 - #WP27810.
-		$cat_ids = array();
-		foreach ( (array) $r['categories'] as $cat_name ) {
-			$_cat = get_term_by( 'name', $cat_name, 'ddc_tool_category' );
-			if ( $_cat ) {
-				$cat_ids[] = $_cat->term_id;
-			}
+		// posts_per_page
+		// @todo Sanitize?
+		$query_args['posts_per_page'] = $r['posts_per_page'];
+
+		// orderby
+		if ( in_array( $r['orderby'], array( 'name', 'date' ) ) ) {
+			$query_args['orderby'] = $r['orderby'];
 		}
 
-		$query_args['tax_query'][] = array(
-			'taxonomy' => 'ddc_tool_category',
-			'terms' => $cat_ids,
-			'field' => 'id',
-		);
+		// order
+		if ( 'DESC' === strtoupper( $r['order'] ) ) {
+			$query_args['order'] = 'DESC';
+		}
+
+		// @todo support for multiple users
+		if ( false !== $r['user_id'] ) {
+			$query_args['tax_query'][] = array(
+				'taxonomy' => 'ddc_tool_is_used_by_user',
+				'terms' => ddc_get_user_term( $r['user_id'] ),
+				'field' => 'slug',
+			);
+		}
+
+		if ( ! empty( $r['categories'] ) ) {
+			// Can't pass 'name' properly to tax query. Fixed in WP 4.2 - #WP27810.
+			$cat_ids = array();
+			foreach ( (array) $r['categories'] as $cat_name ) {
+				$_cat = get_term_by( 'name', $cat_name, 'ddc_tool_category' );
+				if ( $_cat ) {
+					$cat_ids[] = $_cat->term_id;
+				}
+			}
+
+			$query_args['tax_query'][] = array(
+				'taxonomy' => 'ddc_tool_category',
+				'terms' => $cat_ids,
+				'field' => 'id',
+			);
+		}
+
+		// search_terms
+		if ( ! empty( $r['search_terms'] ) ) {
+			$query_args['s'] = $r['search_terms'];
+		}
+
+		$tools_query = new WP_Query( $query_args );
+
+		// Add DiRT-specific info to post objects
+		foreach ( $tools_query->posts as &$post ) {
+			$post->dirt_node_id   = get_post_meta( $post->ID, 'dirt_node_id', true );
+			$post->dirt_link      = get_post_meta( $post->ID, 'dirt_link', true );
+			$post->dirt_thumbnail = get_post_meta( $post->ID, 'dirt_thumbnail', true );
+			$post->dirt_image     = get_post_meta( $post->ID, 'dirt_image', true );
+		}
+
+		$tools = $tools_query->posts;
+
+		wp_cache_add( $cache_key, $tools, 'ddc_tools' );
 	}
 
-	// search_terms
-	if ( ! empty( $r['search_terms'] ) ) {
-		$query_args['s'] = $r['search_terms'];
-	}
-
-	$tools_query = new WP_Query( $query_args );
-
-	// Add DiRT-specific info to post objects
-	foreach ( $tools_query->posts as &$post ) {
-		$post->dirt_node_id   = get_post_meta( $post->ID, 'dirt_node_id', true );
-		$post->dirt_link      = get_post_meta( $post->ID, 'dirt_link', true );
-		$post->dirt_thumbnail = get_post_meta( $post->ID, 'dirt_thumbnail', true );
-		$post->dirt_image     = get_post_meta( $post->ID, 'dirt_image', true );
-	}
-
-	return $tools_query->posts;
+	return $tools;
 }
 
 /**
