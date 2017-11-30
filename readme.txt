@@ -34,6 +34,9 @@ Development of the plugin is ongoing. Visit https://github.com/cuny-academic-com
 
 == Changelog ==
 
+= 1.2.0 =
+* Performance improvements
+
 = 1.1.0 =
 * Add menu to user dropdown in admin bar
 * Improved BP 2.6+ compatibility
