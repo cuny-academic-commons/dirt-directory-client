@@ -29,13 +29,13 @@
 		<?php $tool_users = ddc_get_users_of_tool( get_the_ID(), array( 'count' => false, ) ); ?>
 
 		<ul class="dirt-tool-all-users-list">
-		<?php foreach ( $tool_users['users'] as $tool_user ) : ?>
+		<?php foreach ( $tool_users as $tool_user_id ) : ?>
 			<li>
 				<?php printf(
 					'%s <a href="%s">%s</a>',
-					bp_core_fetch_avatar( array( 'item_id' => $tool_user->ID, 'width' => 25, 'height' => 25, ) ),
-					trailingslashit( bp_core_get_user_domain( $tool_user->ID ) ) . trailingslashit( ddc_get_slug() ),
-					bp_core_get_user_displayname( $tool_user->ID )
+					bp_core_fetch_avatar( array( 'item_id' => $tool_user_id, 'width' => 25, 'height' => 25, ) ),
+					trailingslashit( bp_core_get_user_domain( $tool_user_id ) ) . trailingslashit( ddc_get_slug() ),
+					bp_core_get_user_displayname( $tool_user_id )
 				); ?>
 			</li>
 		<?php endforeach; ?>

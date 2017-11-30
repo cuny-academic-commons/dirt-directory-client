@@ -184,7 +184,7 @@ function ddc_get_tool( $by, $value ) {
  * @since 1.0.0
  *
  * @param int $tool_id
- * @return bool|array $users False on failure, users on success.
+ * @return bool|array $users False on failure, user IDs on success.
  */
 function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	$args = array_merge( array(
@@ -249,21 +249,16 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 	if ( empty( $user_ids ) ) {
 		$user_ids = array( 0 );
+	} elseif ( $args['count'] && $args['count'] > count( $user_ids ) ) {
+		$keys = array_rand( $user_ids, $args['count'] );
+		$_user_ids = array();
+		foreach ( $keys as $key ) {
+			$_user_ids[] = (int) $user_ids[ $key ];
+		}
+		$user_ids = $_user_ids;
 	}
 
-	$cache_key = md5( json_encode( $user_ids ) ) . $args['count'];
-	$users = wp_cache_get( $cache_key, 'ddc_bp_users' );
-	if ( false === $users ) {
-		$users = bp_core_get_users( array(
-			'type'            => 'random',
-			'include'         => $user_ids,
-			'populate_extras' => false,
-			'per_page'        => $args['count'],
-		) );
-		wp_cache_add( $cache_key, $users, 'ddc_bp_users' );
-	}
-
-	return $users;
+	return $user_ids;
 }
 
 /**

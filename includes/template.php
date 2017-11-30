@@ -70,25 +70,23 @@ function ddc_tool_markup( $tool_data ) {
 
 	$used_by_group_members = array();
 	if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
-		$used_by_group_members_query = ddc_get_users_of_tool( $tool->ID, array(
+		$used_by_group_members = ddc_get_users_of_tool( $tool->ID, array(
 			'count' => false,
 			'group_id' => bp_get_current_group_id(),
 		) );
-		$used_by_group_members = $used_by_group_members_query['users'];
 	}
 
 	$exclude = false;
 	if ( ! empty( $used_by_group_members ) ) {
-		$exclude = wp_list_pluck( $used_by_group_members, 'ID' );
+		$exclude = $used_by_group_members;
 	}
 
 	$used_by_users = array();
 	if ( $tool ) {
-		$used_by_query = ddc_get_users_of_tool( $tool->ID, array(
+		$used_by_users = ddc_get_users_of_tool( $tool->ID, array(
 			'count' => 3,
 			'exclude' => $exclude,
 		) );
-		$used_by_users = $used_by_query['users'];
 	}
 
 	// Action button
@@ -126,12 +124,12 @@ function ddc_tool_markup( $tool_data ) {
 	}
 
 	if ( ! empty( $users_to_list ) ) {
-		foreach ( $users_to_list as $used_by_user ) {
+		foreach ( $users_to_list as $used_by_user_id ) {
 			$used_by_list_items[] = sprintf(
 				'<span class="dirt-tool-user dirt-tool-user-%d"><a href="%s">%s</a></span>',
-				$used_by_user->ID,
-				bp_core_get_user_domain( $used_by_user->ID ) . ddc_get_slug() . '/',
-				bp_core_get_user_displayname( $used_by_user->ID )
+				$used_by_user_id,
+				bp_core_get_user_domain( $used_by_user_id ) . ddc_get_slug() . '/',
+				bp_core_get_user_displayname( $used_by_user_id )
 			);
 		}
 
