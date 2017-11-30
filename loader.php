@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: DiRT Directory Client
-Version: 1.0.1
+Version: 1.2.0
 Description: Interface with the DiRT Directory API http://dirt.projectbamboo.org
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 License for more details.
 */
 
-define( 'DDC_VERSION', '1.0.1' );
+define( 'DDC_VERSION', '1.2.0' );
 define( 'DDC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -56,3 +56,13 @@ function ddc_include() {
 	require DDC_PLUGIN_DIR . 'includes/bp-integration.php';
 }
 add_action( 'bp_include', 'ddc_include' );
+
+/**
+ * Load plugin translations.
+ *
+ * @since 1.0.2
+ */
+function ddc_load_textdomain() {
+	load_plugin_textdomain( 'dirt-directory-client', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'plugins_loaded', 'ddc_load_textdomain' );

@@ -184,7 +184,7 @@ function ddc_get_tool( $by, $value ) {
  * @since 1.0.0
  *
  * @param int $tool_id
- * @return bool|array $users False on failure, users on success.
+ * @return bool|array $users False on failure, user IDs on success.
  */
 function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	$args = array_merge( array(
@@ -202,6 +202,32 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 	}
 
 	$user_ids = array();
+
+	$group_ids = null;
+	if ( false !== $args['group_id'] ) {
+		$group_ids = wp_parse_id_list( $args['group_id'] );
+	}
+
+	$group_member_ids = array();
+	if ( ! empty( $group_ids ) && bp_is_active( 'groups' ) ) {
+		foreach ( $group_ids as $group_id ) {
+			$group_members = wp_cache_get( $group_id, 'ddc_bp_group_members' );
+			if ( false === $group_members ) {
+				$group_member_query = new BP_Group_Member_Query( array(
+					'group_id' => $args['group_id'],
+					'type' => 'alphabetical',
+					'group_role' => array( 'admin', 'mod', 'member' ),
+				) );
+				wp_cache_add( $group_id, $group_member_query->results, 'ddc_bp_group_members' );
+				$this_group_member_ids = wp_list_pluck( $group_member_query->results, 'ID' );
+			} else {
+				$this_group_member_ids = wp_list_pluck( $group_members, 'ID' );
+			}
+		}
+
+		$group_member_ids = array_merge( $group_member_ids, $this_group_member_ids );
+	}
+
 	if ( ! empty( $terms ) ) {
 		foreach ( $terms as $term ) {
 			$user_id = ddc_get_user_id_from_usedby_term_slug( $term->slug );
@@ -212,19 +238,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 			// If limiting to a group, check that the user is a member first.
 			if ( ! empty( $args['group_id'] ) && bp_is_active( 'groups' ) ) {
-				if ( ! isset( $group_members ) ) {
-					$group_member_query = new BP_Group_Member_Query( array(
-						'group_id' => $args['group_id'],
-						'group_role' => array(
-							'member',
-							'mod',
-							'admin',
-						),
-					) );
-					$group_members = wp_list_pluck( $group_member_query->results, 'ID' );
-				}
-
-				if ( ! in_array( $user_id, $group_members ) && ( ! $args['include_self'] || $user_id != bp_loggedin_user_id() ) ) {
+				if ( ! in_array( $user_id, $group_member_ids ) && ( ! $args['include_self'] || $user_id != bp_loggedin_user_id() ) ) {
 					continue;
 				}
 			}
@@ -235,16 +249,16 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 	if ( empty( $user_ids ) ) {
 		$user_ids = array( 0 );
+	} elseif ( $args['count'] && $args['count'] > count( $user_ids ) ) {
+		$keys = array_rand( $user_ids, $args['count'] );
+		$_user_ids = array();
+		foreach ( $keys as $key ) {
+			$_user_ids[] = (int) $user_ids[ $key ];
+		}
+		$user_ids = $_user_ids;
 	}
 
-	$users = bp_core_get_users( array(
-		'type'            => 'random',
-		'include'         => $user_ids,
-		'populate_extras' => false,
-		'per_page'        => $args['count'],
-	) );
-
-	return $users;
+	return $user_ids;
 }
 
 /**
@@ -382,6 +396,14 @@ add_action( 'bp_actions', 'ddc_catch_add_remove_requests' );
  */
 class DiRT_Directory_Client_Component extends BP_Component {
 	/**
+	 * Does the given user have tools?
+	 *
+	 * @since 1.1.0
+	 * @var array
+	 */
+	protected $user_has_tools = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -390,7 +412,10 @@ class DiRT_Directory_Client_Component extends BP_Component {
 		parent::start(
 			'ddc',
 			__( 'Digital Research Tools', 'dirt-directory-client' ),
-			DDC_PLUGIN_DIR
+			DDC_PLUGIN_DIR,
+			array(
+				'adminbar_myaccount_order' => 83,
+			)
 		);
 	}
 
@@ -452,13 +477,38 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * @return bool
 	 */
 	public function change_tab_visibility() {
+		if ( class_exists( 'BP_Core_Nav' ) ) {
+			buddypress()->members->nav->edit_nav( array(
+				'show_for_displayed_user' => $this->user_has_tools( bp_displayed_user_id() ),
+			), 'dirt' );
+		} else {
+			$bp_nav = buddypress()->bp_nav;
+
+			$bp_nav['dirt']['show_for_displayed_user'] = $this->user_has_tools( bp_displayed_user_id() );
+
+			buddypress()->bp_nav = $bp_nav;
+		}
+	}
+
+	/**
+	 * Does the user have tools?
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return bool
+	 */
+	protected function user_has_tools( $user_id ) {
+		if ( isset( $this->user_has_tools[ $user_id ] ) ) {
+			return (bool) $this->user_has_tools[ $user_id ];
+		}
+
 		$tools_query = new WP_Query( array(
 			'post_type' => 'ddc_tool',
 			'post_status' => 'publish',
 			'tax_query' => array(
 				array(
 					'taxonomy' => 'ddc_tool_is_used_by_user',
-					'terms' => ddc_get_user_term( bp_displayed_user_id() ),
+					'terms' => ddc_get_user_term( $user_id ),
 					'field' => 'slug',
 				),
 			),
@@ -468,11 +518,9 @@ class DiRT_Directory_Client_Component extends BP_Component {
 			'update_post_meta_cache' => false,
 		) );
 
-		$bp_nav = buddypress()->bp_nav;
+		$this->user_has_tools[ $user_id ] = $tools_query->have_posts();
 
-		$bp_nav['dirt']['show_for_displayed_user'] = $tools_query->have_posts();
-
-		buddypress()->bp_nav = $bp_nav;
+		return $this->user_has_tools[ $user_id ];
 	}
 
 	/**
@@ -496,6 +544,36 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 */
 	public function template_content_loader() {
 		bp_get_template_part( 'dirt/member' );
+	}
+
+	/**
+	 * Set up the component entries in the WordPress Admin Bar.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array $wp_admin_nav See BP_Component::setup_admin_bar() for a description.
+	 */
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
+		if ( ! $this->user_has_tools( bp_loggedin_user_id() ) ) {
+			return;
+		}
+
+		$wp_admin_nav[] = array(
+			'parent' => buddypress()->my_account_menu_id,
+			'id' => 'my-account-dirt',
+			'title' => __( 'Digital Research Tools', 'dirt-directory-client' ),
+			'href' => bp_loggedin_user_domain() . $this->slug . '/',
+		);
+
+		// Add a subnav just so that the styling isn't weird.
+		$wp_admin_nav[] = array(
+			'parent' => 'my-account-dirt',
+			'id' => 'my-account-dirt-tools',
+			'title' => __( 'My Tools', 'dirt-directory-client' ),
+			'href' => bp_loggedin_user_domain() . $this->slug . '/',
+		);
+
+		parent::setup_admin_bar( $wp_admin_nav );
 	}
 }
 
