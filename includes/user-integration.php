@@ -249,7 +249,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 
 	if ( empty( $user_ids ) ) {
 		$user_ids = array( 0 );
-	} elseif ( $args['count'] && $args['count'] > count( $user_ids ) ) {
+	} elseif ( $args['count'] && $args['count'] < count( $user_ids ) ) {
 		$keys = array_rand( $user_ids, $args['count'] );
 		$_user_ids = array();
 		foreach ( $keys as $key ) {
