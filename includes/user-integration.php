@@ -192,6 +192,7 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 		'include_self' => true,
 		'count' => false,
 		'exclude' => false,
+		'fields' => 'all',
 	), $args );
 
 	$terms = get_the_terms( $tool_id, 'ddc_tool_is_used_by_user' );
@@ -256,6 +257,10 @@ function ddc_get_users_of_tool( $tool_id, $args = array() ) {
 			$_user_ids[] = (int) $user_ids[ $key ];
 		}
 		$user_ids = $_user_ids;
+	}
+
+	if ( 'count' === $args['fields'] ) {
+		return count( $user_ids );
 	}
 
 	return $user_ids;

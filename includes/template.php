@@ -141,7 +141,11 @@ function ddc_tool_markup( $tool_data ) {
 				$local_tool_url . '#users'
 			);
 		} else if ( ! empty( $used_by_list_items ) ) {
-			$used_by_list_item_count = $used_by_query['total'] - 3;
+			$total_user_count = ddc_get_users_of_tool( $tool_id, array(
+				'fields' => 'count',
+			) );
+
+			$used_by_list_item_count = $total_user_count - 3;
 			if ( $used_by_list_item_count < 0 ) {
 				$used_by_list_item_count = 0;
 			}
