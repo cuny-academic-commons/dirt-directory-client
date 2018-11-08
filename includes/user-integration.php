@@ -482,6 +482,11 @@ class DiRT_Directory_Client_Component extends BP_Component {
 	 * @return bool
 	 */
 	public function change_tab_visibility() {
+		// Don't bother with query if there's no user.
+		if ( ! bp_displayed_user_id() ) {
+			return;
+		}
+
 		if ( class_exists( 'BP_Core_Nav' ) ) {
 			buddypress()->members->nav->edit_nav( array(
 				'show_for_displayed_user' => $this->user_has_tools( bp_displayed_user_id() ),
